@@ -108,7 +108,7 @@ class list_student extends Component {
             text_code: `${student.id}${student.email}${student.phone_number}`,
             full_name: student.full_name
         });
-        
+
     }
 
     _renderStudentsList = (student) => {
@@ -184,7 +184,7 @@ class list_student extends Component {
                             <TouchableOpacity
                                 // onPress={() => alert(`id:${student.id},email: ${student.email}, phone: ${student.phone_number}`)}
                                 onPress={() => this.taoQR(student)}
-                                ><Text>{student.full_name}</Text></TouchableOpacity>
+                            ><Text>{student.full_name}</Text></TouchableOpacity>
                             <Text note>{student.email}</Text>
                         </Body>
                         <Right>
@@ -229,7 +229,16 @@ class list_student extends Component {
                     </Body>
                     <Right>
                         <Button transparent>
-                            <Text></Text>
+                            {/* <TouchableOpacity style={{ borderRadius: 5, backgroundColor: 'orange' }} onPress={() => { this.diemDanh(student.id) }}><Text note>điểm danh</Text></TouchableOpacity> */}
+
+                            <Icon onPress={() => {
+                                Alert.alert('Notice!',
+                                    `Bạn đang đăng nhập bằng tài khoản: ${this.state.email}`,
+                                    [
+                                        { text: 'Okay', onPress: () => console.log('okie') }
+                                    ])
+                            }} type="MaterialCommunityIcons" style={{ fontSize: 25, color: 'white' }} name="face-profile" />
+                            {/* <Text>Profile</Text> */}
                         </Button>
                     </Right>
                 </Header>
