@@ -1,19 +1,6 @@
 import React, { Component } from 'react';
 import { View, Text, SafeAreaView } from 'react-native';
 import { Container, Header, Left, Body, Right, Button, Icon, Title, Content, Form, Item, Input, Label } from 'native-base';
-// import firebase from 'firebase';
-// import Firebase from 'firebase';
-// import Backend from '../../config/Backend';
-
-// class FirebaseSvc {
-//     login = async (user, success_callback, failed_callback) => {
-//         console.log('login')
-//         await firebase.auth()
-//             .signInWithEmailAndPassword(user.email, user.password)
-//             .then(success_callback, failed_callback);
-//     }
-// }
-// const firebaseSvc = new FirebaseSvc();
 
 class login extends Component {
     constructor(props) {
@@ -30,10 +17,7 @@ class login extends Component {
 
     onChangeTextPassword = password => this.setState({ password });
 
-    onChangeUserName = name => this.setState({ name });
-
     onPressLogin = async () => {
-        // console.log('login')
         const user = {
             email: this.state.email,
             password: this.state.password,
@@ -157,10 +141,6 @@ class login extends Component {
                 <Content>
                     <Form style={{ paddingBottom: 15 }}>
                         <Item stackedLabel>
-                            <Label>Username</Label>
-                            <Input onChangeText={(name) => this.onChangeUserName(name)} />
-                        </Item>
-                        <Item stackedLabel>
                             <Label>Email</Label>
                             <Input onChangeText={(email) => this.onChangeTextEmail(email)} />
                         </Item>
@@ -179,6 +159,20 @@ class login extends Component {
                         onPress={() => this.props.navigation.navigate('sign_up')}
                     >
                         <Text>Sign up</Text>
+                    </Button>
+                    
+                    <Text style={{ paddingLeft: 180 }}>OR</Text>
+                    <Button full
+                        onPress={() => this.props.navigation.navigate('scanQRScreen')}
+                    >
+                        <Text>scan QR</Text>
+                    </Button>
+
+                    <Text style={{ paddingLeft: 180 }}>OR</Text>
+                    <Button full
+                        onPress={() => this.props.navigation.navigate('codeGenerateScreen')}
+                    >
+                        <Text>generate QR</Text>
                     </Button>
                 </Content>
             </Container>

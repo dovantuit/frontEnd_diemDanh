@@ -1,13 +1,11 @@
-'use strict';
-
+// 'use strict';
 import React, { Component } from 'react'
 import QRCode from 'react-native-qrcode';
-
 import {
     AppRegistry,
     StyleSheet,
     View,
-    TextInput
+    TextInput, Text
 } from 'react-native';
 
 export default class codeGenerateScreen extends Component {
@@ -19,20 +17,20 @@ export default class codeGenerateScreen extends Component {
     render() {
         return (
             <View style={styles.container}>
+                <Text>Input here plz:</Text>
                 <TextInput
                     style={styles.input}
                     onChangeText={(text) => this.setState({ text: text })}
                     value={this.state.text}
                 />
                 <QRCode
-                    value={this.state.text}
+                    value={this.state.text.toString()}
                     size={200}
-                    bgColor='purple'
+                    bgColor='black'
                     fgColor='white' />
             </View>
         );
     };
-
 }
 
 const styles = StyleSheet.create({

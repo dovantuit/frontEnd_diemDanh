@@ -4,8 +4,8 @@ import { Container, Header, Left, Body, Right, Button, Icon, Title, Content, For
 // import firebase from 'firebase';
 // import Firebase from 'firebase';
 
-
 class sign_up extends Component {
+    
     constructor(props) {
         super(props);
         this.state = {
