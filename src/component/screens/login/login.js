@@ -7,7 +7,7 @@ class login extends Component {
         super(props);
         this.state = {
             user: [],
-            email: 'admin@gmail.com',
+            email: 'dovantuit@gmail.com',
             password: '123456',
             name: "",
             accounts: []
@@ -15,12 +15,12 @@ class login extends Component {
     }
     async  loadData_SQL() {
 
-        fetch('http://192.168.1.14:3000/accounts_read')
+        fetch('http://10.0.5.180:3000/accounts_read')
             .then((response) => response.json())
             .then((responseJson) => {
                 // console.log(responseJson)
                 this.setState({
-                    students: responseJson.accounts,
+                    accounts: responseJson.accounts,
                 }, () => console.log(this.state.accounts)
                 );
             })
@@ -28,23 +28,26 @@ class login extends Component {
                 console.error(error);
             });
     }
+    async componentDidMount() {
+        await this.loadData_SQL()
+    }
 
     onChangeTextEmail = email => this.setState({ email });
 
     onChangeTextPassword = password => this.setState({ password });
 
     onPressLogin = async () => {
-        this.state.accounts.map(that_account =>{
-            if(that_account.email === this.state.email && that_account.password === this.state.password ){
-                this.props.navigation.navigate('sign_up', {
-                    //         uid: Backend.getUid(),
-                    //         name: this.state.name,
-                            email: this.state.email,
-                    //         user: user.name
-                        });
+        this.state.accounts.map(that_account => {
+            if (that_account.email === this.state.email && that_account.password === this.state.password) {
+                this.props.navigation.navigate('list_student', {
+                    email: that_account.email,
+                });
             }
-            else{
-                alert('khong ton tai account nay!')
+            if (that_account.email === this.state.email && that_account.password != this.state.password) {
+                alert('mật khẩu không đúng')
+            }
+            if (that_account.email != this.state.email) {
+                alert('tài khoản không tồn tại!')
             }
         })
     }

@@ -10,6 +10,7 @@ class list_student extends Component {
         super(props);
         this.state = {
             students: [],
+            email:''
 
         };
     }
@@ -83,16 +84,24 @@ class list_student extends Component {
             .then(response => console.log('Success:', JSON.stringify(response)))
             .catch(error => console.error('Error:', error));
     }
+    componentWillMount(){
+        this.setState({
+            email: this.props.navigation.state.params.email
+        },()=>console.log(`>>> email dang nhap: ${this.state.email}`))
+    }
 
     componentDidMount() {
         this.loadData_SQL()
         // this.addData_SQL()
 
     }
-    diemDanh = (id) => {
-        this.updateData_SQL(id)
+    
+    async diemDanh(id) {
+        await this.updateData_SQL(id)
+        await this.props.navigation.navigate('list_student', {
+            email: this.state.email,
+        });
         alert('da diem danh thanh cong ')
-
     }
 
     _renderStudentsList = (student) => {
