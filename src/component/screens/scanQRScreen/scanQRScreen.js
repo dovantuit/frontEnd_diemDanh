@@ -2,7 +2,7 @@ import { StyleSheet, View, Text, Platform, TouchableOpacity, Linking, Permission
 import React, { Component } from 'react';
 import { CameraKitCameraScreen, } from 'react-native-camera-kit';
 // scan QR code
-export default class App extends Component {
+export default class scanQRScreen extends Component {
     constructor() {
 
         super();

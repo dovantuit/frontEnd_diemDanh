@@ -1,54 +1,22 @@
-'use strict';
- 
-import React, { Component } from 'react'
-import QRCode from 'react-native-qrcode';
- 
-import {
-    AppRegistry,
-    StyleSheet,
-    View,
-    TextInput
-} from 'react-native';
+import { createAppContainer, createStackNavigator, createSwitchNavigator } from 'react-navigation';
 
-export default class App extends Component {
+import codeGenerateScreen from './src/component/screens/codeGenerateScreen/codeGenerateScreen';
+import scanQRScreen from './src/component/screens/scanQRScreen/scanQRScreen';
 
-  state = {
-    text: 'http://facebook.github.io/react-native/',
-  };
-  
-  render() {
-    return (
-      <View style={styles.container}>
-        <TextInput
-          style={styles.input}
-          onChangeText={(text) => this.setState({text: text})}
-          value={this.state.text}
-        />
-        <QRCode
-          value={this.state.text}
-          size={200}
-          bgColor='purple'
-          fgColor='white'/>
-      </View>
-    );
-  };
 
-}
 
-const styles = StyleSheet.create({
-  container: {
-      flex: 1,
-      backgroundColor: 'white',
-      alignItems: 'center',
-      justifyContent: 'center'
+console.disableYellowBox = true;
+
+export default createAppContainer(createSwitchNavigator(
+  {
+    codeGenerateScreen: codeGenerateScreen,
+    scanQRScreen: scanQRScreen,
+   
+
   },
+  {
+    initialRouteName: 'scanQRScreen',
+    // initialRouteName: 'login_redux_form',
 
-  input: {
-      height: 40,
-      borderColor: 'gray',
-      borderWidth: 1,
-      margin: 10,
-      borderRadius: 5,
-      padding: 5,
   }
-});
+));
