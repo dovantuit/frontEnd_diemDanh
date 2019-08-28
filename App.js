@@ -3,6 +3,7 @@ import codeGenerateScreen from './src/component/screens/codeGenerateScreen/codeG
 import scanQRScreen from './src/component/screens/scanQRScreen/scanQRScreen';
 import login from './src/component/screens/login/login';
 import sign_up from './src/component/screens/sign_up/sign_up';
+import list_student from './src/component/screens/list_student/list_student';
 
 console.disableYellowBox = true;
 
@@ -11,12 +12,13 @@ export default createAppContainer(createSwitchNavigator(
     codeGenerateScreen: codeGenerateScreen,
     scanQRScreen: scanQRScreen,
     login: login,
-    sign_up:sign_up,
+    sign_up: sign_up,
+    list_student: list_student
 
   },
   {
     // initialRouteName: 'sign_up',
-    initialRouteName: 'login',
+    initialRouteName: 'list_student',
     // initialRouteName: 'codeGenerateScreen',
     // initialRouteName: 'scanQRScreen',
 

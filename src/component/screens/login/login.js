@@ -10,7 +10,23 @@ class login extends Component {
             email: 'admin@gmail.com',
             password: '123456',
             name: "",
+            accounts: []
         };
+    }
+    async  loadData_SQL() {
+
+        fetch('http://192.168.1.14:3000/accounts_read')
+            .then((response) => response.json())
+            .then((responseJson) => {
+                // console.log(responseJson)
+                this.setState({
+                    students: responseJson.accounts,
+                }, () => console.log(this.state.accounts)
+                );
+            })
+            .catch((error) => {
+                console.error(error);
+            });
     }
 
     onChangeTextEmail = email => this.setState({ email });
@@ -18,12 +34,19 @@ class login extends Component {
     onChangeTextPassword = password => this.setState({ password });
 
     onPressLogin = async () => {
-        const user = {
-            email: this.state.email,
-            password: this.state.password,
-            name: (this.state.name === "") ? 'default' : this.state.name,
-        };
-        // await firebaseSvc.login(user, this.loginSuccess(), this.loginFailed());
+        this.state.accounts.map(that_account =>{
+            if(that_account.email === this.state.email && that_account.password === this.state.password ){
+                this.props.navigation.navigate('sign_up', {
+                    //         uid: Backend.getUid(),
+                    //         name: this.state.name,
+                            email: this.state.email,
+                    //         user: user.name
+                        });
+            }
+            else{
+                alert('khong ton tai account nay!')
+            }
+        })
     }
 
     // taoUser = (user) => {
@@ -160,7 +183,7 @@ class login extends Component {
                     >
                         <Text>Sign up</Text>
                     </Button>
-                    
+
                     <Text style={{ paddingLeft: 180 }}>OR</Text>
                     <Button full
                         onPress={() => this.props.navigation.navigate('scanQRScreen')}

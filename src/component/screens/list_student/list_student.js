@@ -2,53 +2,55 @@ import React, { Component } from 'react';
 import { View, FlatList, SafeAreaView, TouchableOpacity, ScrollView, Image } from 'react-native';
 import { Container, Header, Left, Body, Right, Button, Icon, Title, Content, Form, Item, Input, Label, List, ListItem, Thumbnail, Text } from 'native-base';
 
-import Backend from '../../config/Backend';
+// import Backend from '../../config/Backend';
 // import { ScrollView } from 'react-native-gesture-handler';
 
-class room_list extends Component {
+class list_student extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            roomLists: [],
-            users: [],
-            user_sql: [],
+            students: [],
 
         };
     }
+    async addData_SQL() {
+        // alert('update now')
+        var url = 'http://192.168.1.14:3000/students_add';
+        var data = {
+            email: 'email',
+            full_name: 'full_name',
+            phone_number: 'phone_number',
+            address: 'address',
+            attended: 'attended',
+            createBy: 'createBy',
+            updateBy: 'updateBy',
+            is_delete: false,
+        };
 
-    // async updateData_SQL() {
-    //     // alert('update now')
-    //     var url = 'http://10.0.5.179:3000/user_update';
-    //     var data = {
-    //         id: '18',
-    //         id_user: '9',
-    //         avatar: '9',
-    //         emai: '9',
-    //         name: '9',
-    //         sub_id: '9',
-    //         user_id: '9'
-    //     };
+        fetch(url, {
+            method: 'POST', // or 'PUT'
 
-    //     fetch(url, {
-    //         method: 'POST', // or 'PUT'
-    //         body: JSON.stringify(data), // data can be `string` or {object}!
-    //         headers: {
-    //             'Content-Type': 'application/x-www-form-urlencoded'
-    //         }
-    //     }).then(res => res.json())
-    //         .then(response => console.log('Success:', JSON.stringify(response)))
-    //         .catch(error => console.error('Error:', error));
-    // }
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(
+                data
+            ), // data can be `string` or {object}!
+        }).then(res => res.json())
+            .then(response => console.log('Success:', JSON.stringify(response)))
+            .catch(error => console.error('Error:', error));
+    }
 
     async  loadData_SQL() {
 
-        fetch('http://10.0.5.179:3000/user_read')
+        fetch('http://192.168.1.14:3000/students_read')
             .then((response) => response.json())
             .then((responseJson) => {
                 // console.log(responseJson)
                 this.setState({
-                    user_sql: responseJson.user,
-                }, () => console.log(this.state.user_sql)
+                    students: responseJson.students,
+                }, () => console.log(this.state.students)
                 );
             })
             .catch((error) => {
@@ -56,41 +58,45 @@ class room_list extends Component {
             });
     }
 
+    async updateData_SQL(id) {
+        var url = 'http://192.168.1.14:3000/students_update';
+        var data = {
+            id: id,
+            // email: 'ttttttttttttttt',
+            // full_name: 'full_name',
+            // phone_number: 'phone_number',
+            // address: 'address',
+            attended: true,
+            // createBy: 'createBy',
+            // updateBy: 'updateBy',
+            // is_delete: false,
+        };
+
+        fetch(url, {
+            method: 'POST', // or 'PUT'
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data), // data can be `string` or {object}!
+        }).then(res => res.json())
+            .then(response => console.log('Success:', JSON.stringify(response)))
+            .catch(error => console.error('Error:', error));
+    }
+
     componentDidMount() {
-        // this.loadData_SQL()
-        // this.updateData_SQL()
-       
+        this.loadData_SQL()
+        this.updateData_SQL(34)
+
+    }
+    diemDanh = (id) => {
+        this.updateData_SQL(id)
+        alert('da diem danh thanh cong ')
+
     }
 
-    _renderRoomList = (item) => {
-        
-        return (
-            <TouchableOpacity
-                // style={{borderWidth:1}}
-                onPress={() => this.props.navigation.navigate("login", {
-                    // key: item.key,
-                    room_id: item.room_id,
-                    room_name: item.room_name,
-                    user_id: item.user_id[0].id_guess
-                }
-                )}>
-                <View style={{ paddingHorizontal: 15 }}>
-                    <Text style={{ borderWidth: 1, borderRadius: 5, paddingHorizontal: 5, paddingVertical: 5, marginBottom: 5, marginTop: 10 }}>{item.room_name}</Text>
-                </View></TouchableOpacity>
+    _renderStudentsList = (student) => {
 
-            // <TouchableOpacity onPress={() => this.props.navigation.navigate('Chatdetail'
-            // )}>
-            //     <View>
-            //         <Text>{item.room_name}</Text>
-            //     </View>
-            // </TouchableOpacity>
-        );
-    }
-
-    _renderUserList = (user) => {
-        var this_user = user
-        // console.log(room)
-        // console.log(room.user_id)
         return (
             <TouchableOpacity style={{
                 // borderWidth: 1,
@@ -106,10 +112,10 @@ class room_list extends Component {
                 // borderWidth:50
 
             }}
-                onPress={() => { this.taoChatRoom(this_user) }}
+                onPress={() => { this.diemDanh(student.id) }}
             >
-                <View style={{ paddingHorizontal: 15, alignContent: 'space-between', }}>
-                    <Image source={{ uri: this_user.avatar }} style={{
+                {/* <View style={{ paddingHorizontal: 15, alignContent: 'space-between', }}> */}
+                {/* <Image source={{ uri: this_user.avatar }} style={{
 
                         marginTop: 10,
                         height: 60,
@@ -117,23 +123,31 @@ class room_list extends Component {
                         borderRadius: 30,
 
                     }}
-                    />
+                    /> */}
 
-                </View>
-                <View style={{ paddingHorizontal: 15, alignContent: 'space-between', marginLeft: 70, marginTop: -65 }}>
+                {/* </View> */}
+                <View style={{ paddingHorizontal: 15, alignContent: 'space-between', marginLeft: 10, marginTop: -5, marginRight: 190 }}>
 
                     <Text style={{
                         // borderWidth: 1, borderRadius: 5,
                         paddingHorizontal: 5, paddingVertical: 5, marginBottom: 5, marginTop: 0, fontWeight: 'bold'
-                    }}>{this_user.name}</Text>
+                    }}>{student.full_name}</Text>
                 </View>
-                <View style={{ paddingHorizontal: 15, alignContent: 'space-between', marginLeft: 70, marginTop: -5 }}>
+                <View style={{ paddingHorizontal: 15, alignContent: 'space-between', marginLeft: 10, marginTop: 10 }}>
 
                     <Text style={{
                         fontSize: 11,
                         // borderWidth: 1, borderRadius: 5,
-                        paddingHorizontal: 5, paddingVertical: 5, marginBottom: 5, marginTop: 0
-                    }}>{this_user.sub_id}</Text>
+                        paddingHorizontal: 5, paddingVertical: 5, marginBottom: 5, marginTop: 0, marginRight: 190
+                    }}>{student.email}</Text>
+                </View>
+                <View style={{ paddingHorizontal: 15, alignContent: 'space-between', marginLeft: 150, marginTop: -5 }}>
+
+                    <Text style={{
+                        fontSize: 11,
+                        // borderWidth: 1, borderRadius: 5,
+                        paddingHorizontal: 5, paddingVertical: 5, marginBottom: 5, marginTop: 30, marginRight: 90
+                    }}>{student.phone_number}</Text>
                 </View>
                 <View style={{ paddingHorizontal: 15, alignContent: 'space-between', marginLeft: 340, marginTop: -45 }}>
 
@@ -144,61 +158,6 @@ class room_list extends Component {
             </TouchableOpacity>
         );
     }
-
-    taoChatRoom = (user_khach) => {
-        const list_room = this.state.roomLists;
-        const current_user = Backend.getUid();
-        var dem = 0
-        var id_phong_trung = 0
-        var ten_phong_trung = ""
-
-        list_room.forEach((earch_room) => {
-            if (earch_room.user_id[0].id_owner == current_user && earch_room.user_id[0].id_guess == user_khach.user_id) {
-                dem++
-                id_phong_trung = earch_room.room_id
-                ten_phong_trung = earch_room.room_name
-            }
-        });
-
-
-        if (dem > 0) {
-            // console.log(user)
-
-            // alert('phong da ton tai')
-            this.props.navigation.navigate("chat_room", {
-                // key: item.key,
-                room_id: id_phong_trung,
-                ten_phong: ten_phong_trung,
-
-                // room_name: item.room_name,
-                // user_id: item.user_id[0].id_guess
-            })
-
-        }
-        else {
-            var new_room_id = Backend.S4() + Backend.S4()
-
-            firebase.database().ref('roomlists').push({
-                room_id: new_room_id,
-                room_name: user_khach.name,
-                last_mess: "hello",
-                user_id: [{
-                    id_guess: user_khach.user_id,
-                    id_owner: Backend.getUid(),
-                }]
-
-            });
-            // alert('da tao phong thanh cong')
-        }
-        // this.props.navigation.navigate("chat_room", {
-        //     // key: item.key,
-        //     room_id: new_room_id,
-        //     room_name: user_khach.earch_room,
-        //     // user_id: item.user_id[0].id_guess
-        // })
-
-    }
-
 
     render() {
         return (
@@ -212,7 +171,7 @@ class room_list extends Component {
                         </Button>
                     </Left>
                     <Body>
-                        <Title>Danh sách bạn bè</Title>
+                        <Title>Danh sách hoc sinh</Title>
                     </Body>
                     <Right>
                         <Button transparent>
@@ -222,18 +181,12 @@ class room_list extends Component {
                 </Header>
                 <Content style={{ width: '99.8%', paddingLeft: "0.2%", }}>
                     <ScrollView >
-                        {/* <FlatList
-                            style={{ marginBottom: 10 }}
-                            data={this.state.roomLists}
-                            renderItem={({ item }, index) => this._renderRoomList(item)}s
-                        /> */}
                         <FlatList
                             style={{ marginBottom: 1 }}
-                            data={this.state.roomLists}
-                            renderItem={({ item }, index) => this._renderUserList(item)}
+                            data={this.state.students}
+                            renderItem={({ item }, index) => this._renderStudentsList(item)}
                             column={1}
                         />
-
                     </ScrollView>
 
                 </Content>
@@ -243,4 +196,4 @@ class room_list extends Component {
     }
 }
 
-export default room_list;
+export default list_student;
