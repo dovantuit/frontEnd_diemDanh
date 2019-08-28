@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, SafeAreaView } from 'react-native';
+import { View, Text, SafeAreaView, Alert } from 'react-native';
 import { Container, Header, Left, Body, Right, Button, Icon, Title, Content, Form, Item, Input, Label } from 'native-base';
 
 class login extends Component {
@@ -37,18 +37,22 @@ class login extends Component {
     onChangeTextPassword = password => this.setState({ password });
 
     onPressLogin = async () => {
+        var dem  = 0
         this.state.accounts.map(that_account => {
+            // if (that_account.email === this.state.email || that_account.password != this.state.password) {
+            //     Alert.alert('Chú ý!',
+            //     ` tài khoản hoặc mật khẩu không đúng  `,
+            //     [
+            //         { text: 'Yes', onPress: () => console.log('okie') }
+                    
+            //     ])
+            // }
             if (that_account.email === this.state.email && that_account.password === this.state.password) {
                 this.props.navigation.navigate('list_student', {
                     email: that_account.email,
                 });
             }
-            if (that_account.email === this.state.email && that_account.password != this.state.password) {
-                alert('mật khẩu không đúng')
-            }
-            if (that_account.email != this.state.email) {
-                alert('tài khoản không tồn tại!')
-            }
+           
         })
     }
 
