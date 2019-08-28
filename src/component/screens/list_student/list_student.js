@@ -86,7 +86,7 @@ class list_student extends Component {
 
     componentDidMount() {
         this.loadData_SQL()
-        this.addData_SQL()
+        // this.addData_SQL()
 
     }
     diemDanh = (id) => {
@@ -158,20 +158,39 @@ class list_student extends Component {
             </TouchableOpacity>
         );
     }
-    renderList=(student)=>{
-        return(
-            <List>
-            <ListItem avatar>
-              <Body>
-                <Text>{student.full_name}</Text>
-                <Text note>{student.email}</Text>
-              </Body>
-              <Right>
-                <Text note>3:43 pm</Text>
-              </Right>
-            </ListItem>
-          </List>
-        )
+    renderList = (student) => {
+        if (student.attended == true) {
+            return (
+                <List>
+                    <ListItem avatar>
+                        <Body>
+                            <Text>{student.full_name}</Text>
+                            <Text note>{student.email}</Text>
+                        </Body>
+                        <Right>
+                            <Text note>đã tham dự</Text>
+
+                        </Right>
+                    </ListItem>
+                </List>
+            )
+        }
+        else {
+            return (
+                <List>
+                    <ListItem avatar>
+                        <Body>
+                            <Text>{student.full_name}</Text>
+                            <Text note>{student.email}</Text>
+                        </Body>
+                        <Right>
+                            <Text note>chưa tham dự</Text>
+                            <TouchableOpacity style={{ borderRadius: 5, backgroundColor: 'orange' }} onPress={() => { this.diemDanh(student.id) }}><Text note>điểm danh</Text></TouchableOpacity>
+                        </Right>
+                    </ListItem>
+                </List>
+            )
+        }
     }
 
     render() {
@@ -186,7 +205,7 @@ class list_student extends Component {
                         </Button>
                     </Left>
                     <Body>
-                        <Title>Danh sách hoc sinh</Title>
+                        <Title>Students list</Title>
                     </Body>
                     <Right>
                         <Button transparent>

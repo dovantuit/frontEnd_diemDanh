@@ -18,9 +18,10 @@ export default createAppContainer(createSwitchNavigator(
   },
   {
     // initialRouteName: 'sign_up',
-    initialRouteName: 'list_student',
+    // initialRouteName: 'list_student',
     // initialRouteName: 'codeGenerateScreen',
     // initialRouteName: 'scanQRScreen',
+    initialRouteName: 'login',
 
   }
 ));
