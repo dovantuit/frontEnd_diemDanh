@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { View, FlatList, SafeAreaView, TouchableOpacity, ScrollView, Image } from 'react-native';
+import { View, FlatList, SafeAreaView, TouchableOpacity, ScrollView, Image, Alert } from 'react-native';
 import { Container, Header, Left, Body, Right, Button, Icon, Title, Content, Form, Item, Input, Label, List, ListItem, Thumbnail, Text } from 'native-base';
-
+import QRCode from 'react-native-qrcode';
 // import Backend from '../../config/Backend';
 // import { ScrollView } from 'react-native-gesture-handler';
 
@@ -10,7 +10,7 @@ class list_student extends Component {
         super(props);
         this.state = {
             students: [],
-            email:''
+            email: ''
 
         };
     }
@@ -84,10 +84,10 @@ class list_student extends Component {
             .then(response => console.log('Success:', JSON.stringify(response)))
             .catch(error => console.error('Error:', error));
     }
-    componentWillMount(){
+    componentWillMount() {
         this.setState({
             email: this.props.navigation.state.params.email
-        },()=>console.log(`>>> email dang nhap: ${this.state.email}`))
+        }, () => console.log(`>>> email dang nhap: ${this.state.email}`))
     }
 
     componentDidMount() {
@@ -95,13 +95,20 @@ class list_student extends Component {
         // this.addData_SQL()
 
     }
-    
+
     async diemDanh(id) {
         await this.updateData_SQL(id)
         await this.props.navigation.navigate('list_student', {
             email: this.state.email,
         });
         alert('da diem danh thanh cong ')
+    }
+    taoQR = (student) => {
+        this.props.navigation.navigate('codeGenerateScreen', {
+            text_code: `${student.id}${student.email}${student.phone_number}`,
+            full_name: student.full_name
+        });
+        
     }
 
     _renderStudentsList = (student) => {
@@ -170,10 +177,14 @@ class list_student extends Component {
     renderList = (student) => {
         if (student.attended == true) {
             return (
+
                 <List>
                     <ListItem avatar>
                         <Body>
-                            <Text>{student.full_name}</Text>
+                            <TouchableOpacity
+                                // onPress={() => alert(`id:${student.id},email: ${student.email}, phone: ${student.phone_number}`)}
+                                onPress={() => this.taoQR(student)}
+                                ><Text>{student.full_name}</Text></TouchableOpacity>
                             <Text note>{student.email}</Text>
                         </Body>
                         <Right>

@@ -12,8 +12,68 @@ export default class scanQRScreen extends Component {
             QR_Code_Value: '',
 
             Start_Scanner: false,
+            students: []
 
         };
+    }
+
+    async  loadData_SQL() {
+
+        fetch('http://10.0.5.180:3000/students_read')
+            .then((response) => response.json())
+            .then((responseJson) => {
+                // console.log(responseJson)
+                this.setState({
+                    students: responseJson.students,
+                }, () => console.log(this.state.students)
+                );
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+    }
+
+    async updateData_SQL(id) {
+        var url = 'http://10.0.5.180:3000/students_update';
+        var data = {
+            id: id,
+            // email: 'ttttttttttttttt',
+            // full_name: 'full_name',
+            // phone_number: 'phone_number',
+            // address: 'address',
+            attended: true,
+            // createBy: 'createBy',
+            // updateBy: 'updateBy',
+            // is_delete: false,
+        };
+
+        fetch(url, {
+            method: 'POST', // or 'PUT'
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data), // data can be `string` or {object}!
+        }).then(res => res.json())
+            .then(response => console.log('Success:', JSON.stringify(response)))
+            .catch(error => console.error('Error:', error));
+    }
+
+    componentWillMount() {
+        this.loadData_SQL()
+    }
+
+    checkDiemDanh = (text_code) => {
+        this.state.students.map(that_student =>{
+            if(that_student.id+that_student.email+that_student.phone_number === text_code){
+                this.updateData_SQL(that_student.id)
+                alert('đã check in')
+            }
+            if(that_student.id+that_student.email+that_student.phone_number != text_code){
+                // this.updateData_SQL(that_student.id)
+                alert('không tìm thấy sinh viên này trong danh sách!')
+            }
+        })
     }
 
     openLink_in_browser = () => {
@@ -27,6 +87,8 @@ export default class scanQRScreen extends Component {
         this.setState({ QR_Code_Value: QR_Code });
 
         this.setState({ Start_Scanner: false });
+
+        this.checkDiemDanh(this.state.QR_Code_Value)
     }
 
     open_QR_Code_Scanner = () => {

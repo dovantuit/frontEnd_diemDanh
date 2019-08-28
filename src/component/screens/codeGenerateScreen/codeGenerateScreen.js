@@ -7,24 +7,36 @@ import {
     View,
     TextInput, Text
 } from 'react-native';
+import { bold } from 'ansi-colors';
 
 export default class codeGenerateScreen extends Component {
 
     state = {
         text: 'http://facebook.github.io/react-native/',
-    };
+        text_code: '',
+        full_name: ''
+    }
+
+    
+    componentDidMount() {
+        this.setState({
+            text_code: this.props.navigation.state.params.text_code,
+            full_name: this.props.navigation.state.params.full_name,
+        })
+    }
+    
 
     render() {
         return (
             <View style={styles.container}>
-                <Text>Input here plz:</Text>
+                <Text style={{ fontWeight: 'bold' }}>{this.state.full_name.toUpperCase()}</Text>
                 <TextInput
                     style={styles.input}
                     onChangeText={(text) => this.setState({ text: text })}
-                    value={this.state.text}
+                    value={this.state.text_code}
                 />
                 <QRCode
-                    value={this.state.text.toString()}
+                    value={this.state.text_code.toString()}
                     size={200}
                     bgColor='black'
                     fgColor='white' />
