@@ -15,7 +15,7 @@ class list_student extends Component {
     }
     async addData_SQL() {
         // alert('update now')
-        var url = 'http://192.168.1.14:3000/students_add';
+        var url = 'http://10.0.5.180:3000/students_add';
         var data = {
             email: 'email',
             full_name: 'full_name',
@@ -44,7 +44,7 @@ class list_student extends Component {
 
     async  loadData_SQL() {
 
-        fetch('http://192.168.1.14:3000/students_read')
+        fetch('http://10.0.5.180:3000/students_read')
             .then((response) => response.json())
             .then((responseJson) => {
                 // console.log(responseJson)
@@ -59,7 +59,7 @@ class list_student extends Component {
     }
 
     async updateData_SQL(id) {
-        var url = 'http://192.168.1.14:3000/students_update';
+        var url = 'http://10.0.5.180:3000/students_update';
         var data = {
             id: id,
             // email: 'ttttttttttttttt',
@@ -86,7 +86,7 @@ class list_student extends Component {
 
     componentDidMount() {
         this.loadData_SQL()
-        this.updateData_SQL(34)
+        this.addData_SQL()
 
     }
     diemDanh = (id) => {
@@ -158,6 +158,21 @@ class list_student extends Component {
             </TouchableOpacity>
         );
     }
+    renderList=(student)=>{
+        return(
+            <List>
+            <ListItem avatar>
+              <Body>
+                <Text>{student.full_name}</Text>
+                <Text note>{student.email}</Text>
+              </Body>
+              <Right>
+                <Text note>3:43 pm</Text>
+              </Right>
+            </ListItem>
+          </List>
+        )
+    }
 
     render() {
         return (
@@ -184,7 +199,7 @@ class list_student extends Component {
                         <FlatList
                             style={{ marginBottom: 1 }}
                             data={this.state.students}
-                            renderItem={({ item }, index) => this._renderStudentsList(item)}
+                            renderItem={({ item }, index) => this.renderList(item)}
                             column={1}
                         />
                     </ScrollView>
