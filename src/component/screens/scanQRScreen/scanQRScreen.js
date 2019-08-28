@@ -68,6 +68,7 @@ export default class scanQRScreen extends Component {
             if(that_student.id+that_student.email+that_student.phone_number === text_code){
                 this.updateData_SQL(that_student.id)
                 alert('đã check in')
+                this.props.navigation.navigate('list_student')
             }
             if(that_student.id+that_student.email+that_student.phone_number != text_code){
                 // this.updateData_SQL(that_student.id)
