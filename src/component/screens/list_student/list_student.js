@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { View, FlatList, SafeAreaView, TouchableOpacity, ScrollView, Image, Alert } from 'react-native';
 import { Container, Header, Left, Body, Right, Button, Icon, Title, Content, Form, Item, Input, Label, List, ListItem, Thumbnail, Text } from 'native-base';
 import QRCode from 'react-native-qrcode';
+import axios from 'axios'
 // import Backend from '../../config/Backend';
 // import { ScrollView } from 'react-native-gesture-handler';
 
@@ -44,13 +45,12 @@ class list_student extends Component {
     }
 
     async  loadData_SQL() {
-
-        fetch('http://10.0.5.180:3000/students_read')
-            .then((response) => response.json())
+        axios.get('http://10.0.5.180:3000/students_read')
             .then((responseJson) => {
+                // console.log('list data')
                 // console.log(responseJson)
                 this.setState({
-                    students: responseJson.students,
+                    students: responseJson.data.students,
                 }, () => console.log(this.state.students)
                 );
             })
@@ -59,8 +59,8 @@ class list_student extends Component {
             });
     }
 
-    async updateData_SQL(id) {
-        var url = 'http://10.0.5.180:3000/students_update';
+
+    async updateData_SQL1(id) {
         var data = {
             id: id,
             // email: 'ttttttttttttttt',
@@ -73,17 +73,48 @@ class list_student extends Component {
             // is_delete: false,
         };
 
-        fetch(url, {
-            method: 'POST', // or 'PUT'
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
+        axios.post(
+            'http://10.0.5.180:3000/students_update', 
+            {
+               'id': id,
+               'attended': 'false',
             },
-            body: JSON.stringify(data), // data can be `string` or {object}!
-        }).then(res => res.json())
-            .then(response => console.log('Success:', JSON.stringify(response)))
+            {
+               headers: {
+                   'api-Accept': 'application/json',
+                   'Content-Type': 'application/json',
+                    //other header fields
+               }
+            }
+        ).then(response => console.log('Success:', JSON.stringify(response)))
             .catch(error => console.error('Error:', error));
     }
+
+    // async updateData_SQL(id) {
+    //     var url = 'http://10.0.5.180:3000/students_update';
+    //     var data = {
+    //         id: id,
+    //         // email: 'ttttttttttttttt',
+    //         // full_name: 'full_name',
+    //         // phone_number: 'phone_number',
+    //         // address: 'address',
+    //         attended: true,
+    //         // createBy: 'createBy',
+    //         // updateBy: 'updateBy',
+    //         // is_delete: false,
+    //     };
+
+    //     fetch(url, {
+    //         method: 'POST', // or 'PUT'
+    //         headers: {
+    //             Accept: 'application/json',
+    //             'Content-Type': 'application/json',
+    //         },
+    //         body: JSON.stringify(data), // data can be `string` or {object}!
+    //     }).then(res => res.json())
+    //         .then(response => console.log('Success:', JSON.stringify(response)))
+    //         .catch(error => console.error('Error:', error));
+    // }
     componentWillMount() {
         this.setState({
             email: this.props.navigation.state.params.email
@@ -92,6 +123,7 @@ class list_student extends Component {
 
     componentDidMount() {
         this.loadData_SQL()
+        // this.updateData_SQL1(54)
         // this.addData_SQL()
 
     }
@@ -111,69 +143,6 @@ class list_student extends Component {
 
     }
 
-    _renderStudentsList = (student) => {
-
-        return (
-            <TouchableOpacity style={{
-                // borderWidth: 1,
-                // borderRadius: 15, 
-                marginVertical: 0, // tren duoi
-                // flexDirection: 'column',
-                // justifyContent: 'space-between',
-                // alignItems: 'center',
-                backgroundColor: 'white',
-                height: 80,
-                borderBottomWidth: 1,
-                borderBottomStartRadius: 50
-                // borderWidth:50
-
-            }}
-                onPress={() => { this.diemDanh(student.id) }}
-            >
-                {/* <View style={{ paddingHorizontal: 15, alignContent: 'space-between', }}> */}
-                {/* <Image source={{ uri: this_user.avatar }} style={{
-
-                        marginTop: 10,
-                        height: 60,
-                        width: 60,
-                        borderRadius: 30,
-
-                    }}
-                    /> */}
-
-                {/* </View> */}
-                <View style={{ paddingHorizontal: 15, alignContent: 'space-between', marginLeft: 10, marginTop: -5, marginRight: 190 }}>
-
-                    <Text style={{
-                        // borderWidth: 1, borderRadius: 5,
-                        paddingHorizontal: 5, paddingVertical: 5, marginBottom: 5, marginTop: 0, fontWeight: 'bold'
-                    }}>{student.full_name}</Text>
-                </View>
-                <View style={{ paddingHorizontal: 15, alignContent: 'space-between', marginLeft: 10, marginTop: 10 }}>
-
-                    <Text style={{
-                        fontSize: 11,
-                        // borderWidth: 1, borderRadius: 5,
-                        paddingHorizontal: 5, paddingVertical: 5, marginBottom: 5, marginTop: 0, marginRight: 190
-                    }}>{student.email}</Text>
-                </View>
-                <View style={{ paddingHorizontal: 15, alignContent: 'space-between', marginLeft: 150, marginTop: -5 }}>
-
-                    <Text style={{
-                        fontSize: 11,
-                        // borderWidth: 1, borderRadius: 5,
-                        paddingHorizontal: 5, paddingVertical: 5, marginBottom: 5, marginTop: 30, marginRight: 90
-                    }}>{student.phone_number}</Text>
-                </View>
-                <View style={{ paddingHorizontal: 15, alignContent: 'space-between', marginLeft: 340, marginTop: -45 }}>
-
-
-                    <Icon type="AntDesign" style={{ fontSize: 35, color: 'black' }} name="right" />
-                </View>
-
-            </TouchableOpacity>
-        );
-    }
     renderList = (student) => {
         if (student.attended == true) {
             return (

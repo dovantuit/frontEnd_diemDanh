@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import { View, Text, SafeAreaView, Alert } from 'react-native';
 import { Container, Header, Left, Body, Right, Button, Icon, Title, Content, Form, Item, Input, Label } from 'native-base';
+import Format from './style'
+import axios from 'axios'
+import Backend from '../../../services/http/index'
 
 class login extends Component {
     constructor(props) {
@@ -14,13 +17,15 @@ class login extends Component {
         };
     }
     async  loadData_SQL() {
-
-        fetch('http://10.0.5.180:3000/accounts_read')
-            .then((response) => response.json())
+        axios.get('http://10.0.5.180:3000/accounts_read')
+        // .then((log)=>console.log(log))
+        // .catch(()=>console.log('error'))
+            // fetch('http://10.0.5.180:3000/accounts_read')
+            // .then((response) => response.json())
             .then((responseJson) => {
                 // console.log(responseJson)
                 this.setState({
-                    accounts: responseJson.accounts,
+                    accounts: responseJson.data.accounts,
                 }, () => console.log(this.state.accounts)
                 );
             })
@@ -37,127 +42,33 @@ class login extends Component {
     onChangeTextPassword = password => this.setState({ password });
 
     onPressLogin = async () => {
-        var dem  = 0
+        var dem = 0
         this.state.accounts.map(that_account => {
-            // if (that_account.email === this.state.email || that_account.password != this.state.password) {
-            //     Alert.alert('Chú ý!',
-            //     ` tài khoản hoặc mật khẩu không đúng  `,
-            //     [
-            //         { text: 'Yes', onPress: () => console.log('okie') }
-                    
-            //     ])
-            // }
+           
             if (that_account.email === this.state.email && that_account.password === this.state.password) {
                 this.props.navigation.navigate('list_student', {
                     email: that_account.email,
                 });
+                
             }
-           
+            if (that_account.email === this.state.email || that_account.password != this.state.password) {
+                // Alert.alert('Chú ý!',
+                //     ` tài khoản hoặc mật khẩu không đúng  `,
+                //     [
+                //         { text: 'Yes', onPress: () => console.log('okie') }
+
+                //     ])
+            }
+
         })
     }
-
-    // taoUser = (user) => {
-    //     // check trùng usesr
-    //     // var trung = 0;
-    //     //  this.state.users.map(that_user => {
-    //     //     if (that_user.email === user.email) {
-    //     //         trung += 1
-    //     //     }
-    //     // })
-    //     // if (trung = 0) {
-
-    //     firebase.database().ref('user').push({
-    //         email: user.email,
-    //         user_id: Backend.getUid(),
-    //         name: this.state.name,
-    //         avatar: 'https://placeimg.com/140/140/any',
-    //         sub_id: Backend.S4() + Backend.S4(),
-
-    //     });
-    //     // }
-
-    //     ///
-
-    //     // alert(user.email)
-    // }
-
-    // loginSuccess = () => {
-    //     /// --- get user information
-    //     var user = firebase.auth().currentUser;
-    //     if (user) {
-
-    //         // User is signed in.
-    //         if (user != null) {
-
-    //             this.taoUser(user);
-    //             email = user.email;
-    //             uid = user.uid;
-    //             name = user.name;
-    //             // alert(uid)
-    //         }
-    //     } else {
-    //         // No user is signed in.
-    //     }
-    //     ///
-
-    //     // Alert.alert('Notice!',
-    //     //     `Successed login under ${this.state.email},\n you are in chat now`,
-    //     //     [
-    //     //         { text: 'Okie Great', onPress: () => console.log('okie') }
-    //     //     ])
-    //     // alert('login successful, navigate.');
-    //     this.props.navigation.navigate('menu', {
-    //         uid: Backend.getUid(),
-    //         name: this.state.name,
-    //         email: this.state.email,
-    //         user: user.name
-    //     });
-    // };
-
-    // loginFailed = () => {
-    //     alert('Login failure. Please tried again.');
-    // };
-
-    // componentWillMount() {
-    //     // if (!firebase.apps.length) { // avoid re-build firebase
-    //     //     var config = {
-    //     //         apiKey: "AIzaSyAQpkf7fbY5Pie65N8I83imKp6yVAMPUWg",
-    //     //         authDomain: "unitchat-37201.firebaseapp.com",
-    //     //         databaseURL: "https://unitchat-37201.firebaseio.com",
-    //     //         projectId: "unitchat-37201",
-    //     //         storageBucket: "",
-    //     //         messagingSenderId: "701005589704",
-    //     //         appId: "1:701005589704:web:164635bca576ee06"
-    //     //     };
-    //     //     firebase.initializeApp(config);
-    //     // }
-    //     // firebase.database().ref('user').on("value", snapshot => {
-    //     //     if (snapshot.val() !== undefined && snapshot.val() !== null) {
-    //     //         this.setState({
-    //     //             users: Object.values(snapshot.val())
-    //     //         }, () => console.log(this.state.users));
-    //     //     }
-    //     // });
-
-    // };
-
-    // componentDidMount() {
-    //     // let username = await AsyncStorage.getItem('name');
-    //     // this.setState({ username })
-    //     // firebase.database().ref('user').on("value", snapshot => {
-    //     //     if (snapshot.val() !== undefined && snapshot.val() !== null) {
-    //     //         this.setState({
-    //     //             users: Object.values(snapshot.val())
-    //     //         }, () => console.log(this.state.users));
-    //     //     }
-    //     // });
-    // }
 
     render() {
         return (
             <Container>
                 <Header>
                     <Left>
+                        <Icon type="SimpleLineIcons" style={{ fontSize: 25, color: 'white' }} name="login" />
                     </Left>
                     <Body>
                         <Title>Login</Title>
@@ -169,7 +80,7 @@ class login extends Component {
                     </Right>
                 </Header>
                 <Content>
-                    <Form style={{ paddingBottom: 15 }}>
+                    <Form style={Format.form}>
                         <Item stackedLabel>
                             <Label>Email</Label>
                             <Input onChangeText={(email) => this.onChangeTextEmail(email)} />
@@ -180,30 +91,27 @@ class login extends Component {
                         </Item>
                     </Form>
                     <Button full
+                        style={Format.button_login}
                         onPress={() => this.onPressLogin()}
                     >
-                        <Text>Login</Text>
+                        <Text style={Format.button_text}>LOGIN</Text>
                     </Button>
-                    <Text style={{ paddingLeft: 180 }}>OR</Text>
+                    <Text style={Format.button_text}></Text>
                     <Button full
+                        style={Format.button_login}
                         onPress={() => this.props.navigation.navigate('sign_up')}
                     >
-                        <Text>Sign up</Text>
+                        <Text style={Format.button_text}>SIGN UP</Text>
                     </Button>
 
-                    <Text style={{ paddingLeft: 180 }}>OR</Text>
+                    <Text style={Format.button_text}></Text>
                     <Button full
+                        style={Format.button_login}
                         onPress={() => this.props.navigation.navigate('scanQRScreen')}
                     >
-                        <Text>scan QR</Text>
+                        <Text style={Format.button_text}>SCAN QR</Text>
                     </Button>
 
-                    <Text style={{ paddingLeft: 180 }}>OR</Text>
-                    <Button full
-                        onPress={() => this.props.navigation.navigate('codeGenerateScreen')}
-                    >
-                        <Text>generate QR</Text>
-                    </Button>
                 </Content>
             </Container>
         );

@@ -1,6 +1,8 @@
 import { StyleSheet, View, Text, Platform, TouchableOpacity, Linking, PermissionsAndroid } from 'react-native';
 import React, { Component } from 'react';
 import { CameraKitCameraScreen, } from 'react-native-camera-kit';
+import { Container, Header, Left, Body, Right, Title, Button, Icon } from 'native-base';
+
 // scan QR code
 export default class scanQRScreen extends Component {
     constructor() {
@@ -34,7 +36,6 @@ export default class scanQRScreen extends Component {
     }
 
     async updateData_SQL(id) {
-        var url = 'http://10.0.5.180:3000/students_update';
         var data = {
             id: id,
             // email: 'ttttttttttttttt',
@@ -47,17 +48,48 @@ export default class scanQRScreen extends Component {
             // is_delete: false,
         };
 
-        fetch(url, {
-            method: 'POST', // or 'PUT'
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
+        axios.post(
+            'http://10.0.5.180:3000/students_update', 
+            {
+               'id': id,
+               'attended': 'false',
             },
-            body: JSON.stringify(data), // data can be `string` or {object}!
-        }).then(res => res.json())
-            .then(response => console.log('Success:', JSON.stringify(response)))
+            {
+               headers: {
+                   'api-Accept': 'application/json',
+                   'Content-Type': 'application/json',
+                    //other header fields
+               }
+            }
+        ).then(response => console.log('Success:', JSON.stringify(response)))
             .catch(error => console.error('Error:', error));
     }
+
+    // async updateData_SQL1(id) {
+    //     var url = 'http://10.0.5.180:3000/students_update';
+    //     var data = {
+    //         id: id,
+    //         // email: 'ttttttttttttttt',
+    //         // full_name: 'full_name',
+    //         // phone_number: 'phone_number',
+    //         // address: 'address',
+    //         attended: true,
+    //         // createBy: 'createBy',
+    //         // updateBy: 'updateBy',
+    //         // is_delete: false,
+    //     };
+
+    //     fetch(url, {
+    //         method: 'POST', // or 'PUT'
+    //         headers: {
+    //             Accept: 'application/json',
+    //             'Content-Type': 'application/json',
+    //         },
+    //         body: JSON.stringify(data), // data can be `string` or {object}!
+    //     }).then(res => res.json())
+    //         .then(response => console.log('Success:', JSON.stringify(response)))
+    //         .catch(error => console.error('Error:', error));
+    // }
 
     componentWillMount() {
         this.loadData_SQL()
@@ -86,10 +118,9 @@ export default class scanQRScreen extends Component {
     onQR_Code_Scan_Done = (QR_Code) => {
 
         this.setState({ QR_Code_Value: QR_Code });
-
+        this.checkDiemDanh(this.state.QR_Code_Value)
         this.setState({ Start_Scanner: false });
 
-        this.checkDiemDanh(this.state.QR_Code_Value)
     }
 
     open_QR_Code_Scanner = () => {
@@ -129,7 +160,7 @@ export default class scanQRScreen extends Component {
             return (
                 <View style={styles.MainContainer}>
 
-                    <Text style={{ fontSize: 22, textAlign: 'center' }}>React Native Scan QR Code Example</Text>
+                    <Text style={{ fontSize: 22, textAlign: 'center' }}>Check QR code của bạn ở đây</Text>
 
                     <Text style={styles.QR_text}>
                         {this.state.QR_Code_Value ? 'Scanned QR Code: ' + this.state.QR_Code_Value : ''}
@@ -147,7 +178,7 @@ export default class scanQRScreen extends Component {
                         onPress={this.open_QR_Code_Scanner}
                         style={styles.button}>
                         <Text style={{ color: '#FFF', fontSize: 14 }}>
-                            Open QR Scanner
+                            Click to scan now
             </Text>
                     </TouchableOpacity>
 
@@ -156,6 +187,20 @@ export default class scanQRScreen extends Component {
         }
         return (
             <View style={{ flex: 1 }}>
+                <Container>
+            <Header>
+                    <Left>
+                        <Button transparent onPress={()=>this.props.navigation.navigate("login")}>
+                            <Icon name='arrow-back'/>
+                            {/* <Text>Back</Text> */}
+                        </Button>
+                    </Left>
+                    <Body>
+                        <Title>QR CODE SCAN</Title>
+                    </Body>
+                    <Right />
+                </Header>
+            
 
                 <CameraKitCameraScreen
                     showFrame={true}
@@ -167,6 +212,7 @@ export default class scanQRScreen extends Component {
                         this.onQR_Code_Scan_Done(event.nativeEvent.codeStringValue)
                     }
                 />
+                </Container>
 
             </View>
         );
