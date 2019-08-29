@@ -6,7 +6,7 @@ import axios from 'axios'
 // import Backend from '../../config/Backend';
 // import { ScrollView } from 'react-native-gesture-handler';
 
-class list_student extends Component {
+class menu extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -74,17 +74,17 @@ class list_student extends Component {
         };
 
         axios.post(
-            'http://10.0.5.180:3000/students_update', 
+            'http://10.0.5.180:3000/students_update',
             {
-               'id': id,
-               'attended': 'false',
+                'id': id,
+                'attended': 'false',
             },
             {
-               headers: {
-                   'api-Accept': 'application/json',
-                   'Content-Type': 'application/json',
+                headers: {
+                    'api-Accept': 'application/json',
+                    'Content-Type': 'application/json',
                     //other header fields
-               }
+                }
             }
         ).then(response => console.log('Success:', JSON.stringify(response)))
             .catch(error => console.error('Error:', error));
@@ -116,9 +116,9 @@ class list_student extends Component {
     //         .catch(error => console.error('Error:', error));
     // }
     componentWillMount() {
-        this.setState({
-            email: this.props.navigation.state.params.email
-        }, () => console.log(`>>> email dang nhap: ${this.state.email}`))
+        // this.setState({
+        //     email: this.props.navigation.state.params.email
+        // }, () => console.log(`>>> email dang nhap: ${this.state.email}`))
     }
 
     componentDidMount() {
@@ -169,10 +169,7 @@ class list_student extends Component {
                 <List>
                     <ListItem avatar>
                         <Body>
-                        <TouchableOpacity
-                                // onPress={() => alert(`id:${student.id},email: ${student.email}, phone: ${student.phone_number}`)}
-                                onPress={() => this.taoQR(student)}
-                            ><Text>{student.full_name}</Text></TouchableOpacity>
+                            <Text>{student.full_name}</Text>
                             <Text note>{student.email}</Text>
                         </Body>
                         <Right>
@@ -197,7 +194,7 @@ class list_student extends Component {
                         </Button>
                     </Left>
                     <Body>
-                        <Title>Students list</Title>
+                        <Title>Menu</Title>
                     </Body>
                     <Right>
                         <Button transparent>
@@ -215,14 +212,14 @@ class list_student extends Component {
                     </Right>
                 </Header>
                 <Content style={{ width: '99.8%', paddingLeft: "0.2%", }}>
-                    <ScrollView >
-                        <FlatList
-                            style={{ marginBottom: 1 }}
-                            data={this.state.students}
-                            renderItem={({ item }, index) => this.renderList(item)}
-                            column={1}
-                        />
-                    </ScrollView>
+                    <TouchableOpacity style={{ borderRadius: 5, backgroundColor: 'lightblue', paddingVertical: 15, marginVertical:10 }} onPress={() => {
+                        this.props.navigation.navigate('list_student', {
+                            email: this.state.email,
+                        })
+                    }}><Text note>Danh sách học sinh</Text></TouchableOpacity>
+                    <TouchableOpacity style={{ borderRadius: 5, backgroundColor: 'lightblue', paddingVertical:15 }} onPress={() => {
+                        this.props.navigation.navigate('scanQRScreen')
+                    }}><Text note>Scan QR code</Text></TouchableOpacity>
 
                 </Content>
             </Container>
@@ -231,4 +228,4 @@ class list_student extends Component {
     }
 }
 
-export default list_student;
+export default menu;

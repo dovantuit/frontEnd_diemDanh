@@ -41,6 +41,9 @@ export default class codeGenerateScreen extends Component {
                     size={200}
                     bgColor='black'
                     fgColor='white' />
+                    <Text onPress={()=>this.props.navigation.navigate("list_student",{
+                        email:this.state.full_name
+                    })} style={{ fontWeight: 'bold' }}>BACK</Text>
             </View>
         );
     };
