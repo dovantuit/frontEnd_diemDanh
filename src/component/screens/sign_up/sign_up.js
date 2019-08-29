@@ -116,7 +116,7 @@ class sign_up extends Component {
                 <Header>
                     <Left>
                         <Button transparent
-                            onPress={() => this.props.navigation.navigate('login')}>
+                            onPress={() => this.props.navigation.navigate('login_redux_form')}>
                             <Icon name='arrow-back' />
 
                         </Button>
