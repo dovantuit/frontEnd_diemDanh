@@ -2,6 +2,8 @@ import { StyleSheet, View, Text, Platform, TouchableOpacity, Linking, Permission
 import React, { Component } from 'react';
 import { CameraKitCameraScreen, } from 'react-native-camera-kit';
 import { Container, Header, Left, Body, Right, Title, Button, Icon } from 'native-base';
+import axios from 'axios'
+const hostApi = `http://10.0.5.180:3000`;
 
 // scan QR code
 export default class scanQRScreen extends Component {
@@ -14,14 +16,15 @@ export default class scanQRScreen extends Component {
             QR_Code_Value: '',
 
             Start_Scanner: false,
-            students: []
+            students: [],
+            email: ''
 
         };
     }
 
     async  loadData_SQL() {
 
-        fetch('http://10.0.5.180:3000/students_read')
+        fetch(`${hostApi}/students_read`)
             .then((response) => response.json())
             .then((responseJson) => {
                 // console.log(responseJson)
@@ -34,8 +37,7 @@ export default class scanQRScreen extends Component {
                 console.error(error);
             });
     }
-
-    async updateData_SQL(id) {
+    async updateData_SQL1(id) {
         var data = {
             id: id,
             // email: 'ttttttttttttttt',
@@ -49,64 +51,50 @@ export default class scanQRScreen extends Component {
         };
 
         axios.post(
-            'http://10.0.5.180:3000/students_update', 
+            `${hostApi}/students_update`,
             {
-               'id': id,
-               'attended': 'false',
+                'id': id,
+                'attended': 'true',
             },
             {
-               headers: {
-                   'api-Accept': 'application/json',
-                   'Content-Type': 'application/json',
+                headers: {
+                    'api-Accept': 'application/json',
+                    'Content-Type': 'application/json',
                     //other header fields
-               }
+                }
             }
         ).then(response => console.log('Success:', JSON.stringify(response)))
             .catch(error => console.error('Error:', error));
     }
 
-    // async updateData_SQL1(id) {
-    //     var url = 'http://10.0.5.180:3000/students_update';
-    //     var data = {
-    //         id: id,
-    //         // email: 'ttttttttttttttt',
-    //         // full_name: 'full_name',
-    //         // phone_number: 'phone_number',
-    //         // address: 'address',
-    //         attended: true,
-    //         // createBy: 'createBy',
-    //         // updateBy: 'updateBy',
-    //         // is_delete: false,
-    //     };
-
-    //     fetch(url, {
-    //         method: 'POST', // or 'PUT'
-    //         headers: {
-    //             Accept: 'application/json',
-    //             'Content-Type': 'application/json',
-    //         },
-    //         body: JSON.stringify(data), // data can be `string` or {object}!
-    //     }).then(res => res.json())
-    //         .then(response => console.log('Success:', JSON.stringify(response)))
-    //         .catch(error => console.error('Error:', error));
-    // }
-
     componentWillMount() {
-        this.loadData_SQL()
+        this.loadData_SQL();
+        email: this.props.navigation.state.params.email
     }
 
-    checkDiemDanh = (text_code) => {
-        this.state.students.map(that_student =>{
-            if(that_student.id+that_student.email+that_student.phone_number === text_code){
-                this.updateData_SQL(that_student.id)
-                alert('đã check in')
-                this.props.navigation.navigate('list_student')
+    checkDiemDanh = (string_code) => {
+        var ton_tai = false;
+        var id_tontai = '';
+        this.state.students.map(that_student => {
+            if (`${that_student.email}${that_student.phone_number}` === string_code) {
+                ton_tai = true;
+                id_tontai = that_student.id;
             }
-            if(that_student.id+that_student.email+that_student.phone_number != text_code){
-                // this.updateData_SQL(that_student.id)
-                alert('không tìm thấy sinh viên này trong danh sách!')
-            }
+            
         })
+        if (ton_tai == true) {
+            this.updateData_SQL1(id_tontai)
+            alert(` da update ${id_tontai}`)
+            this.props.navigation.navigate('list_student', {
+                email: this.state.email
+            })
+        }
+        else {
+            alert(`không tìm thấy sinh viên`)
+            this.props.navigation.navigate('menu', {
+                email: this.state.email
+            })
+        }
     }
 
     openLink_in_browser = () => {
@@ -115,10 +103,10 @@ export default class scanQRScreen extends Component {
 
     }
 
-    onQR_Code_Scan_Done = (QR_Code) => {
+    onQR_Code_Scan_Done = async (QR_Code) => {
 
-        this.setState({ QR_Code_Value: QR_Code });
-        this.checkDiemDanh(this.state.QR_Code_Value)
+        await this.setState({ QR_Code_Value: QR_Code });
+        await this.checkDiemDanh(this.state.QR_Code_Value)
         this.setState({ Start_Scanner: false });
 
     }
@@ -188,30 +176,31 @@ export default class scanQRScreen extends Component {
         return (
             <View style={{ flex: 1 }}>
                 <Container>
-            <Header>
-                    <Left>
-                        <Button transparent onPress={()=>this.props.navigation.navigate("login")}>
-                            <Icon name='arrow-back'/>
-                            {/* <Text>Back</Text> */}
-                        </Button>
-                    </Left>
-                    <Body>
-                        <Title>QR CODE SCAN</Title>
-                    </Body>
-                    <Right />
-                </Header>
-            
+                    <Header>
+                        <Left>
+                            <Button transparent onPress={() => this.props.navigation.navigate("menu", {
+                                email: this.state.email
+                            })}>
+                                <Icon type="AntDesign" style={{ fontSize: 25, color: 'white' }} name="back" />
+                            </Button>
+                        </Left>
+                        <Body>
+                            <Title>QR CODE SCAN</Title>
+                        </Body>
+                        <Right />
+                    </Header>
 
-                <CameraKitCameraScreen
-                    showFrame={true}
-                    scanBarcode={true}
-                    laserColor={'#FF3D00'}
-                    frameColor={'#00C853'}
-                    colorForScannerFrame={'black'}
-                    onReadCode={event =>
-                        this.onQR_Code_Scan_Done(event.nativeEvent.codeStringValue)
-                    }
-                />
+
+                    <CameraKitCameraScreen
+                        showFrame={true}
+                        scanBarcode={true}
+                        laserColor={'#FF3D00'}
+                        frameColor={'#00C853'}
+                        colorForScannerFrame={'black'}
+                        onReadCode={event =>
+                            this.onQR_Code_Scan_Done(event.nativeEvent.codeStringValue)
+                        }
+                    />
                 </Container>
 
             </View>

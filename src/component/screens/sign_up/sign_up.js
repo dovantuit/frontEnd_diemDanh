@@ -75,7 +75,7 @@ class sign_up extends Component {
         }else{
             this.addData_SQL()
             alert('đã tạo tài khoản thành công!')
-            this.props.navigation.navigate('login')
+            this.props.navigation.navigate('login_redux_form')
         }
     }
 

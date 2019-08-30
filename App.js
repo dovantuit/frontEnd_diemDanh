@@ -5,6 +5,7 @@ import login from './src/component/screens/login/login';
 import sign_up from './src/component/screens/sign_up/sign_up';
 import list_student from './src/component/screens/list_student/list_student';
 import login_redux_form from './src/component/screens/login/login_redux_form';
+import menu from './src/component/screens/menu/menu';
 
 console.disableYellowBox = true;
 
@@ -15,7 +16,8 @@ export default createAppContainer(createSwitchNavigator(
     login: login,
     sign_up: sign_up,
     list_student: list_student,
-    login_redux_form:login_redux_form
+    login_redux_form:login_redux_form,
+    menu: menu
 
 
   },

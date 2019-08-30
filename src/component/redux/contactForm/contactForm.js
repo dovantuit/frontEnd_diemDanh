@@ -4,7 +4,9 @@ import { StyleSheet, View, Text, TextInput, TouchableOpacity, Alert } from 'reac
 import { bindActionCreators } from 'redux';
 import { withNavigation } from 'react-navigation';
 import { thisExpression } from '@babel/types';
-import axios from 'axios'
+import axios from 'axios';
+const hostApi = `http://10.0.5.180:3000`;
+
 
 // validation
 const validate = values => {
@@ -66,7 +68,7 @@ class ContactComponent extends Component {
         this.state.accounts.map(that_account => {
 
             if (that_account.email === user.email && that_account.password === user.password) {
-                this.props.navigation.navigate('list_student', {
+                this.props.navigation.navigate('menu', {
                     email: that_account.email,
                 });
 
@@ -88,7 +90,7 @@ class ContactComponent extends Component {
     };
 
     async  loadData_SQL() {
-        axios.get('http://10.0.5.180:3000/accounts_read')
+        axios.get(`${hostApi}/accounts_read`)
 
             .then((responseJson) => {
                 this.setState({
