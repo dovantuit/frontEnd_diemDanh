@@ -5156,6 +5156,13 @@ react-native-safe-area-view@^0.14.1:
   dependencies:
     debounce "^1.2.0"
 
+react-native-super-grid@^3.0.9:
+  version "3.0.9"
+  resolved "https://registry.yarnpkg.com/react-native-super-grid/-/react-native-super-grid-3.0.9.tgz#31bc66d897420f914cf0fa2f6c550fc06eff13b3"
+  integrity sha512-d/kht8T6604/x3scunXDldmVnLygXUEDKkZtRzv6AWe69H4W1uYhc/6OhaBnTGD9SmuRXMqB8QRFHDTsCLsa0w==
+  dependencies:
+    prop-types "^15.6.0"
+
 react-native-tab-view@^1.0.0, react-native-tab-view@^1.2.0, react-native-tab-view@^1.4.1:
   version "1.4.1"
   resolved "https://registry.yarnpkg.com/react-native-tab-view/-/react-native-tab-view-1.4.1.tgz#f113cd87485808f0c991abec937f70fa380478b9"

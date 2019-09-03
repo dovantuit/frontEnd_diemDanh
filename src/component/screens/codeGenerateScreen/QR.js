@@ -1,5 +1,5 @@
-import QRCode from 'react-native-qrcode-image';
-import Share from 'react-native-share';
+import QRCode from "react-native-qrcode-image";
+import Share from "react-native-share";
 
 class QR extends React.Component {
   static navigationOptions = {
@@ -8,14 +8,14 @@ class QR extends React.Component {
 
   constructor(props) {
     super(props);
-    this.qrCode = '';
+    this.qrCode = "";
   }
 
   openShareScreen() {
     if (this.qrCode) {
       const shareOptions = {
-        type: 'image/jpg',
-        title: '',
+        type: "image/jpg",
+        title: "",
         url: this.qrCode
       };
       Share.open(shareOptions)
