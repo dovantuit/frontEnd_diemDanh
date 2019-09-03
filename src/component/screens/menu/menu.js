@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+import { scale, verticalScale, moderateScale, WINDOW_SIZE, SPACING_CONSTANTS } from '../../../../src/utils/scale'
+
 import {
   View,
   FlatList,
@@ -7,7 +9,8 @@ import {
   ScrollView,
   Image,
   Alert,
-  ToastAndroid
+  ToastAndroid,
+  StyleSheet
 } from "react-native";
 import {
   Container,
@@ -31,6 +34,7 @@ import {
 import QRCode from "react-native-qrcode";
 import axios from "axios";
 const hostApi = `http://10.0.5.180:3000`;
+import { SectionGrid } from "react-native-super-grid";
 
 // import { ScrollView } from 'react-native-gesture-handler';
 
@@ -38,14 +42,34 @@ class menu extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      email: "",
+      email: "test@gmail.com",
       students: [],
       google_data: [],
       menu_list: [
-        { title: "danh sách sinh viên", link: "list_student" },
-        { title: "Scan QR", link: "scanQRScreen" },
-        { title: "Đồng bộ", link: "Sync" },
-        { title: "Profile", link: "Profile" }
+        {
+          title: "danh sách",
+          link: "list_student",
+          icon: "format-list-checkbox",
+          lib: "MaterialCommunityIcons"
+        },
+        {
+          title: "Scan QR",
+          link: "scanQRScreen",
+          icon: "qrcode",
+          lib: "AntDesign"
+        },
+        {
+          title: "Đồng bộ",
+          link: "Sync",
+          icon: "cloud-sync",
+          lib: "MaterialCommunityIcons"
+        },
+        {
+          title: "Profile",
+          link: "Profile",
+          icon: "face-profile",
+          lib: "MaterialCommunityIcons"
+        }
       ]
     };
   }
@@ -187,9 +211,37 @@ class menu extends Component {
       });
   }
 
+  _renderItem = ({ item }) => (
+    <View style={styles.SingleItem}>
+      <View style={{ alignContent: "center" }}>
+        <TouchableOpacity
+          onPress={() => {
+            this.props.navigation.navigate(`${item.link}`, {
+              email: this.state.email
+            });
+          }}
+        >
+          <Icon
+            type={item.lib}
+            style={{ fontSize: 60, color: "#0086FF", marginLeft: 60 }}
+            name={item.icon}
+          />
+          <Text
+            style={{ margin: 5, textAlign: "center", fontWeight: "bold" }}
+            numberOfLines={1}
+            ellipsizeMode="tail"
+          >
+            {item.title}
+          </Text>
+        </TouchableOpacity>
+      </View>
+    </View>
+  );
+
   componentWillMount() {
     this.setState({
-      email: this.props.navigation.state.params.email
+      // bật để lấy email user
+      // email: this.props.navigation.state.params.email
     });
   }
   componentDidMount() {
@@ -233,139 +285,43 @@ class menu extends Component {
           </Right>
         </Header>
         <Content style={{ width: "99.8%", paddingLeft: "0.2%" }}>
-          <View
-            style={{
-              flexDirection: "row",
-              height: 100,
-              padding: 20
-            }}
-          >
-            <View
-              style={{ backgroundColor: "0086FF", flex: 0.5, borderWidth: 1 }}
-            >
-              <TouchableOpacity
-                onPress={() => {
-                  this.props.navigation.navigate("list_student", {
-                    email: this.state.email
-                  });
-                }}
-              >
-                <Icon
-                  type="AntDesign"
-                  style={{ fontSize: 25, color: "blue" }}
-                  name="back"
-                />
-                <Text>List</Text>
-              </TouchableOpacity>
-            </View>
-            <View
-              style={{ backgroundColor: "0086FF", flex: 0.5, borderWidth: 1 }}
-            >
-              <TouchableOpacity
-                onPress={() => {
-                  this.props.navigation.navigate("list_student", {
-                    email: this.state.email
-                  });
-                }}
-              >
-                <Icon
-                  type="AntDesign"
-                  style={{ fontSize: 25, color: "blue" }}
-                  name="back"
-                />
-                <Text>QR code</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-          <View
-            style={{
-              flexDirection: "row",
-              height: 100,
-              padding: 20
-            }}
-          >
-            <View
-              style={{ backgroundColor: "0086FF", flex: 0.5, borderWidth: 1 }}
-            >
-              <TouchableOpacity
-                onPress={() => {
-                  this.props.navigation.navigate("list_student", {
-                    email: this.state.email
-                  });
-                }}
-              >
-                <Icon
-                  type="AntDesign"
-                  style={{ fontSize: 25, color: "blue" }}
-                  name="back"
-                />
-                <Text>Sync</Text>
-              </TouchableOpacity>
-            </View>
-            <View
-              style={{ backgroundColor: "0086FF", flex: 0.5, borderWidth: 1 }}
-            >
-              <TouchableOpacity
-                onPress={() => {
-                  this.props.navigation.navigate("list_student", {
-                    email: this.state.email
-                  });
-                }}
-              >
-                <Icon
-                  type="AntDesign"
-                  style={{ fontSize: 25, color: "blue" }}
-                  name="back"
-                />
-                <Text>Danh sách học sinh</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-
-          <TouchableOpacity
-            style={{
-              backgroundColor: "blue",
-              paddingVertical: 15,
-              marginVertical: 10
-            }}
-            onPress={() => {
-              this.props.navigation.navigate("scanQRScreen", {
-                email: this.state.email
-              });
-            }}
-          >
-            <Text note style={{ color: "white", fontWeight: "bold" }}>
-              Scan QR code
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={{ backgroundColor: "blue", paddingVertical: 15 }}
-            onPress={() => {
-              this.props.navigation.navigate("scanQRScreen", {
-                email: this.state.email
-              });
-            }}
-          >
-            <Text note style={{ color: "white", fontWeight: "bold" }}>
-              Đồng bộ
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={{ backgroundColor: "blue", paddingVertical: 15 }}
-            onPress={() => {
-              this.props.navigation.navigate("scanQRScreen", {
-                email: this.state.email
-              });
-            }}
-          >
-            <Text note style={{ color: "white", fontWeight: "bold" }}>
-              Profile
-            </Text>
-          </TouchableOpacity>
+          {/* //////////////////////////////////////////////////////////////////////////////////////////////// */}
+          <FlatList
+            style={styles.MovieItem}
+            numColumns={2}
+            data={this.state.menu_list}
+            keyExtractor={(item, index) => item.key}
+            renderItem={this._renderItem}
+          />
         </Content>
       </Container>
     );
   }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: "center",
+    alignContent: "center",
+    width: "100%"
+    // backgroundColor: "lightgray"
+  },
+  MovieItem: {
+    flex: 1,
+    backgroundColor: "black",
+    width: "98%"
+    // borderRadius: 5
+  },
+  SingleItem: {
+    // borderRadius: 16,
+    overflow: "hidden",
+    height: 200,
+    width: "49%",
+    paddingTop: verticalScale(50),
+    marginHorizontal: verticalScale(2.5),
+    backgroundColor: "white"
+  }
+});
 
 export default menu;
