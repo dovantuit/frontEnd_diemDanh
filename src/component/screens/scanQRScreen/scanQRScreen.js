@@ -101,14 +101,14 @@ export default class scanQRScreen extends Component {
     if (ton_tai == true) {
       this.updateData_SQL1(id_tontai);
       //   alert(` da update ${id_tontai}`);
-      this.props.navigation.navigate("list_student", {
-        email: this.state.email
-      });
+      // this.props.navigation.navigate("list_student", {
+      //   email: this.state.email
+      // });
     } else {
       alert(`không tìm thấy sinh viên`);
-      this.props.navigation.navigate("menu", {
-        email: this.state.email
-      });
+      // this.props.navigation.navigate("menu", {
+      //   email: this.state.email
+      // });
     }
   };
 
@@ -191,7 +191,8 @@ export default class scanQRScreen extends Component {
     return (
       <View style={{ flex: 1 }}>
         <Container>
-          <Header>
+          <Header style={{ backgroundColor: "#0086FF" }} androidStatusBarColor="black">
+
             <Left>
               <Button
                 transparent
@@ -209,21 +210,39 @@ export default class scanQRScreen extends Component {
               </Button>
             </Left>
             <Body>
-              <Title>QR CODE SCAN</Title>
+              <Title>QR CODE</Title>
             </Body>
             <Right />
           </Header>
 
           <CameraKitCameraScreen
+            // actions={{ rightButtonText: 'Done', leftButtonText: 'Cancel' }}
             showFrame={true}
             scanBarcode={true}
             laserColor={"#FF3D00"}
             frameColor={"#00C853"}
             colorForScannerFrame={"black"}
-            onReadCode={event =>
-              this.onQR_Code_Scan_Done(event.nativeEvent.codeStringValue)
-            }
+            onReadCode={event => this.onQR_Code_Scan_Done(event.nativeEvent.codeStringValue)}
+            offsetForScannerFrame={10}   //(default 30) optional, offset from left and right side of the screen
+            heightForScannerFrame={300}  //(default 200) optional, change height of the scanner frame
+            colorForScannerFrame={'blue'} //(default white) optional, change colot of the scanner frame
+            hideControls={true}           //(default false) optional, hide buttons and additional controls on top and bottom of screen
+
           />
+          {/* <CameraKitCameraScreen
+            actions={{ rightButtonText: 'Done', leftButtonText: 'Cancel' }}
+            onBottomButtonPressed={(event) => this.onBottomButtonPressed(event)}
+            scanBarcode={true}
+            laserColor={"blue"}
+            frameColor={"yellow"}
+
+            onReadQRCode={((event) => this.onQR_Code_Scan_Done(event.nativeEvent.codeStringValue))} //optional
+            hideControls={false}           //(default false) optional, hide buttons and additional controls on top and bottom of screen
+            showFrame={true}   //(default false) optional, show frame with transparent layer (qr code or barcode will be read on this area ONLY), start animation for scanner,that stoped when find any code. Frame always at center of the screen
+            offsetForScannerFrame={10}   //(default 30) optional, offset from left and right side of the screen
+            heightForScannerFrame={300}  //(default 200) optional, change height of the scanner frame
+            colorForScannerFrame={'red'} //(default white) optional, change colot of the scanner frame
+          /> */}
         </Container>
       </View>
     );

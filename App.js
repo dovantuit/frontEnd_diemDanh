@@ -29,7 +29,7 @@ export default createAppContainer(
       // initialRouteName: 'list_student',
       // initialRouteName: 'codeGenerateScreen',
       // initialRouteName: 'scanQRScreen',
-      initialRouteName: "login_redux_form"
+      initialRouteName: "menu"
     }
   )
 );

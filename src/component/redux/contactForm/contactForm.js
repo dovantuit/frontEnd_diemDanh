@@ -38,7 +38,7 @@ const renderField = ({
 }) => {
   return (
     <View style={{ flexDirection: "row", height: 50, alignItems: "center" }}>
-      <Text style={{ fontSize: 14, fontWeight: "bold", width: 70 }}>
+      <Text style={{ fontSize: 14, fontWeight: "bold", width: 90, marginLeft: 20 }}>
         {label}
       </Text>
       <TextInput
@@ -56,7 +56,7 @@ const renderField = ({
 
       {touched &&
         ((error && (
-          <Text style={{ color: "red", marginLeft: 10 }}>{error}</Text>
+          <Text style={{ color: "red", marginLeft: -200, marginTop: 47, fontSize: 9 }}>{error}</Text>
         )) ||
           (warning && <Text style={{ color: "orange" }}>{warning}</Text>))}
     </View>
@@ -71,7 +71,7 @@ class ContactComponent extends Component {
       password: "",
       name: "",
       accounts: [],
-      google_data: [],
+      // google_data: [],
       students: []
     };
   }
@@ -156,43 +156,43 @@ class ContactComponent extends Component {
       });
   }
 
-  loadData_google() {
-    axios
-      .get(`${hostApi}/gg_read`)
+  // loadData_google() {
+  //   axios
+  //     .get(`${hostApi}/gg_read`)
 
-      .then(responseJson => {
-        this.setState(
-          {
-            google_data: responseJson.data.rows.values
-          },
-          () => {
-            var dem = 0;
-            this.state.google_data.map(row => {
-              this.state.students.map(student => {
-                // dem = 0;
-                if (student.email === row[1]) {
-                  dem = 1;
-                  // alert("trung");
-                }
-              });
-              if (dem === 0) {
-                this.addData_SQL_from_GG(row);
-              }
-              // this.state.student
-              //   var email = row[1];
-              //   var full_name = row[2];
-              //   var phone_number = row[3];
-              //   var address = row[4];
-              //   alert(phone_number);
-              // this.addData_SQL_from_GG(row);
-            });
-          }
-        );
-      })
-      .catch(error => {
-        console.error(error);
-      });
-  }
+  //     .then(responseJson => {
+  //       this.setState(
+  //         {
+  //           google_data: responseJson.data.rows.values
+  //         },
+  //         () => {
+  //           var dem = 0;
+  //           this.state.google_data.map(row => {
+  //             this.state.students.map(student => {
+  //               // dem = 0;
+  //               if (student.email === row[1]) {
+  //                 dem = 1;
+  //                 // alert("trung");
+  //               }
+  //             });
+  //             if (dem === 0) {
+  //               this.addData_SQL_from_GG(row);
+  //             }
+  //             // this.state.student
+  //             //   var email = row[1];
+  //             //   var full_name = row[2];
+  //             //   var phone_number = row[3];
+  //             //   var address = row[4];
+  //             //   alert(phone_number);
+  //             // this.addData_SQL_from_GG(row);
+  //           });
+  //         }
+  //       );
+  //     })
+  //     .catch(error => {
+  //       console.error(error);
+  //     });
+  // }
 
   addData_SQL_from_GG = async student => {
     email = student[1];
@@ -265,7 +265,7 @@ class ContactComponent extends Component {
     // this.loadData_SQL_students();
     // this.loadData_google();
   };
-  componentDidMount = () => {};
+  componentDidMount = () => { };
 
   render() {
     const { handleSubmit } = this.props;
@@ -294,7 +294,7 @@ class ContactComponent extends Component {
 
         <Field
           name="email"
-          d
+          // d
           keyboardType="email-address"
           label="Email:"
           component={renderField}
@@ -323,7 +323,9 @@ class ContactComponent extends Component {
               height: 37,
               width: 200,
               textAlign: "center",
-              padding: 10
+              padding: 10,
+              alignContent: 'center',
+              alignItems: 'center'
             }}
           >
             Login

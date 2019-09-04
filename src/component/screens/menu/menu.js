@@ -254,7 +254,7 @@ class menu extends Component {
   render() {
     return (
       <Container style={{ backgroundColor: "ligtgray" }}>
-        <Header>
+        <Header style={{ backgroundColor: "#0086FF" }} androidStatusBarColor="black">
           <Left>
             <Button transparent>
               <Icon
@@ -263,7 +263,7 @@ class menu extends Component {
                 name="contacts"
               />
 
-              <Text>Back</Text>
+              {/* <Text>Back</Text> */}
             </Button>
           </Left>
           <Body>
