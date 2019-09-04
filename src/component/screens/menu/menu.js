@@ -158,7 +158,8 @@ class menu extends Component {
   }
 
   loadData_google() {
-    ToastAndroid.show("Đang đồng bộ !", ToastAndroid.SHORT);
+    // ToastAndroid.show("Đang đồng bộ !", ToastAndroid.SHORT);
+    alert('Đang đồng bộ!')
     axios
       .get(`${hostApi}/gg_read`)
 
@@ -180,7 +181,8 @@ class menu extends Component {
               if (dem === 0) {
                 this.addData_SQL_from_GG(row);
               }
-              ToastAndroid.show("Đồng bộ thành công!!", ToastAndroid.SHORT);
+              alert('Đồng bộ thành công!')
+              // ToastAndroid.show("Đồng bộ thành công!!", ToastAndroid.SHORT);
 
               // this.state.student
               //   var email = row[1];
@@ -287,7 +289,7 @@ class menu extends Component {
         <Content style={{ width: "99.8%", paddingLeft: "0.2%" }}>
           {/* //////////////////////////////////////////////////////////////////////////////////////////////// */}
           <FlatList
-            style={styles.MovieItem}
+            style={styles.MenuItem}
             numColumns={2}
             data={this.state.menu_list}
             keyExtractor={(item, index) => item.key}
@@ -307,9 +309,9 @@ const styles = StyleSheet.create({
     width: "100%"
     // backgroundColor: "lightgray"
   },
-  MovieItem: {
+  MenuItem: {
     flex: 1,
-    backgroundColor: "black",
+    backgroundColor: "white",
     width: "98%"
     // borderRadius: 5
   },
