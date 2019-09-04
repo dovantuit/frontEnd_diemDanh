@@ -60,13 +60,13 @@ class menu extends Component {
         },
         {
           title: "Đồng bộ",
-          link: "Sync",
+          link: "sync_list",
           icon: "cloud-sync",
           lib: "MaterialCommunityIcons"
         },
         {
           title: "Profile",
-          link: "Profile",
+          link: "profile",
           icon: "face-profile",
           lib: "MaterialCommunityIcons"
         }
@@ -269,10 +269,10 @@ class menu extends Component {
             </Button>
           </Left>
           <Body>
-            <Title>Menu</Title>
+            <Title style={{ color: 'white' }}>Menu</Title>
           </Body>
           <Right>
-            <TouchableOpacity
+            {/* <TouchableOpacity
               style={{ marginBottom: 5 }}
               onPress={() => {
                 this.loadData_google();
@@ -283,7 +283,7 @@ class menu extends Component {
                 style={{ fontSize: 30, color: "white" }}
                 name="sync"
               />
-            </TouchableOpacity>
+            </TouchableOpacity> */}
 
             <Button transparent></Button>
           </Right>

@@ -144,8 +144,10 @@ class list_student extends Component {
     ToastAndroid.show("Đã điểm danh !!", ToastAndroid.SHORT);
   }
   taoQR = student => {
+    var prepare_text_code = { "email": student.email, "phone_number": student.phone_number, "full_name:": student.full_name }
+
     this.props.navigation.navigate("codeGenerateScreen", {
-      text_code: `${student.id}${student.email}${student.phone_number}`,
+      text_code: `${JSON.stringify(prepare_text_code)}`,
       full_name: student.full_name,
       id: student.id,
       email: student.email,
@@ -222,11 +224,11 @@ class list_student extends Component {
 
               {/* <Icon type="AntDesign" style={{ fontSize: 25, color: 'white' }} name="contacts" /> */}
 
-              <Text>Back</Text>
+              {/* <Text>Back</Text> */}
             </Button>
           </Left>
           <Body>
-            <Title>Students list</Title>
+            <Title style={{ color: 'white' }}>Students list</Title>
           </Body>
           <Right>
             {/* <Button transparent> */}

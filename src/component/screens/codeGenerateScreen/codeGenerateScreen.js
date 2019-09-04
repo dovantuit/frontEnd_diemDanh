@@ -72,7 +72,7 @@ export default class codeGenerateScreen extends Component {
           value={this.state.text_code}
         />
         <QRCode
-          value={this.state.text_code.toString()}
+          value={this.state.text_code}
           size={200}
           bgColor="black"
           fgColor="white"

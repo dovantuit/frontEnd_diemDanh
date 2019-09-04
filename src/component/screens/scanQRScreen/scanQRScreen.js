@@ -5,7 +5,7 @@ import {
   Platform,
   TouchableOpacity,
   Linking,
-  PermissionsAndroid
+  PermissionsAndroid, Alert
 } from "react-native";
 import React, { Component } from "react";
 import { CameraKitCameraScreen } from "react-native-camera-kit";
@@ -17,10 +17,13 @@ import {
   Right,
   Title,
   Button,
-  Icon
+  Icon,
+  Content
 } from "native-base";
 import axios from "axios";
 const hostApi = `http://10.0.5.180:3000`;
+import Toast, { DURATION } from 'react-native-easy-toast'
+
 
 // scan QR code
 export default class scanQRScreen extends Component {
@@ -53,6 +56,9 @@ export default class scanQRScreen extends Component {
       });
   }
   async updateData_SQL1(id) {
+    // this.refs.toast.show('đã đỉêm danh!');e
+    alert('checked done!')
+
     var data = {
       id: id,
       // email: 'ttttttttttttttt',
@@ -83,6 +89,93 @@ export default class scanQRScreen extends Component {
       .then(response => console.log("Success:", JSON.stringify(response)))
       .catch(error => console.error("Error:", error));
   }
+  // async loadData_SQL_students() {
+  //   axios
+  //     .get(`${hostApi}/students_read`)
+  //     .then(responseJson => {
+  //       // console.log('list data')
+  //       // console.log(responseJson)
+  //       this.setState(
+  //         {
+  //           students: responseJson.data.students
+  //         },
+  //         () => console.log(this.state.students)
+  //       );
+  //     })
+  //     .catch(error => {
+  //       console.error(error);
+  //     });
+  // }
+  // addData_SQL_from_GG = async student => {
+  //   email = student[1];
+  //   full_name = student[2];
+  //   phone_number = student[3];
+  //   address = student[4];
+  //   // alert('update now')
+  //   var url = `${hostApi}/students_add`;
+  //   var data = {
+  //     email: email,
+  //     full_name: full_name,
+  //     phone_number: phone_number,
+  //     address: address,
+  //     attended: "attended",
+  //     createBy: "createBy",
+  //     updateBy: "updateBy",
+  //     is_delete: false
+  //   };
+
+  //   fetch(url, {
+  //     method: "POST", // or 'PUT'
+
+  //     headers: {
+  //       Accept: "application/json",
+  //       "Content-Type": "application/json"
+  //     },
+  //     body: JSON.stringify(data) // data can be `string` or {object}!
+  //   })
+  //     .then(res => res.json())
+  //     .then(
+  //       // ToastAndroid.show("Đồng bộ thành công!!", ToastAndroid.SHORT),
+  //       console.log("add student Success:", JSON.stringify(response))
+  //     )
+  //     .catch(error => console.error("Error:", error));
+  // };
+
+
+  // loadData_google() {
+  //   // ToastAndroid.show("Đang đồng bộ !", ToastAndroid.SHORT);
+  //   // alert('Đang đồng bộ!')
+  //   this.refs.toast.show('Đang đồng bộ!');
+  //   axios
+  //     .get(`${hostApi}/gg_read`)
+
+  //     .then(responseJson => {
+  //       this.setState(
+  //         {
+  //           google_data: responseJson.data.rows.values
+  //         },
+  //         () => {
+  //           var dem = 0;
+  //           this.state.google_data.map(row => {
+  //             this.state.students.map(student => {
+  //               // dem = 0;
+  //               if (student.email === row[1]) {
+  //                 dem = 1;
+  //                 // alert("trung");
+  //               }
+  //             });
+  //             if (dem === 0) {
+  //               this.addData_SQL_from_GG(row);
+  //             }
+  //             this.refs.toast.show('Đồng bộ thành công!');
+  //           });
+  //         }
+  //       );
+  //     })
+  //     .catch(error => {
+  //       console.error(error);
+  //     });
+  // }
 
   componentWillMount() {
     this.loadData_SQL();
@@ -90,31 +183,70 @@ export default class scanQRScreen extends Component {
   }
 
   checkDiemDanh = string_code => {
+    var student_object = JSON.parse(string_code) // chuyen lại thành object
+    console.log(student_object)
+
+
+
+
+
     var ton_tai = false;
     var id_tontai = "";
     this.state.students.map(that_student => {
-      if (`${that_student.email}${that_student.phone_number}` === string_code) {
+      var prepare_scan_code = {
+        email: that_student.email,
+        phone_number: that_student.phone_number,
+        full_name: that_student.full_name,
+      }
+      if (that_student.email === student_object.email) {
         ton_tai = true;
         id_tontai = that_student.id;
+        mail_trung = that_student.email;
       }
     });
     if (ton_tai == true) {
       this.updateData_SQL1(id_tontai);
-      //   alert(` da update ${id_tontai}`);
-      // this.props.navigation.navigate("list_student", {
-      //   email: this.state.email
-      // });
+
     } else {
-      alert(`không tìm thấy sinh viên`);
-      // this.props.navigation.navigate("menu", {
-      //   email: this.state.email
-      // });
+      ////////////////////////////////////////////////////////////////////////////////////////////
+      Alert.alert("Chú ý!", ` Can't find this student have email ${student_object.email}  `, [
+        { text: "Add this student", onPress: () => { this.addData_SQL(student_object) } },
+        { text: 'Cancel', onPress: () => console.log('CANCEL') }
+      ], { cancelable: true });
     }
   };
 
-  openLink_in_browser = () => {
-    Linking.openURL(this.state.QR_Code_Value);
+  addData_SQL = async (student) => {
+    alert('update now')
+    var url = `${hostApi}/students_add`;
+    var data = {
+      email: student.email,
+      full_name: student.full_name,
+      phone_number: student.phone_number,
+      address: "address",
+      attended: "false",
+      createBy: "createBy",
+      updateBy: "updateBy",
+      is_delete: false
+    };
+
+    fetch(url, {
+      method: "POST", // or 'PUT'
+
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(data) // data can be `string` or {object}!
+    })
+      .then(res => res.json())
+      .then(response => console.log("Success:", JSON.stringify(response)))
+      .catch(error => console.error("Error:", error));
   };
+
+  // openLink_in_browser = () => {
+  //   Linking.openURL(this.state.QR_Code_Value);
+  // };
 
   onQR_Code_Scan_Done = async QR_Code => {
     await this.setState({ QR_Code_Value: QR_Code });
@@ -155,37 +287,64 @@ export default class scanQRScreen extends Component {
   render() {
     if (!this.state.Start_Scanner) {
       return (
-        <View style={styles.MainContainer}>
-          <Text style={{ fontSize: 22, textAlign: "center" }}>
-            Check QR code của bạn ở đây
-          </Text>
+        // <View style={styles.MainContainer}>
+        <Container>
+          <Header style={{ backgroundColor: "#0086FF" }} androidStatusBarColor="black">
 
-          <Text style={styles.QR_text}>
-            {this.state.QR_Code_Value
-              ? "Scanned QR Code: " + this.state.QR_Code_Value
-              : ""}
-          </Text>
+            <Left>
+              <Button
+                transparent
+                onPress={() =>
+                  this.props.navigation.navigate("menu", {
+                    email: this.state.email
+                  })
+                }
+              >
+                <Icon
+                  type="AntDesign"
+                  style={{ fontSize: 25, color: "white" }}
+                  name="back"
+                />
+              </Button>
+            </Left>
+            <Body>
+              <Title>QR CODE</Title>
+            </Body>
+            <Right />
+          </Header>
+          <Toast ref="toast" />
 
-          {this.state.QR_Code_Value.includes("http") ? (
+          {/* ////////////////////////////////////////////////////// */}
+          <Content>
+
+
+            <Text style={styles.QR_text}>
+              {this.state.QR_Code_Value
+                ? "value: " + this.state.QR_Code_Value
+                : ""}
+            </Text>
+
             <TouchableOpacity
-              onPress={this.openLink_in_browser}
+              onPress={this.open_QR_Code_Scanner}
               style={styles.button}
             >
               <Text style={{ color: "#FFF", fontSize: 14 }}>
-                Open Link in default Browser
-              </Text>
-            </TouchableOpacity>
-          ) : null}
-
-          <TouchableOpacity
-            onPress={this.open_QR_Code_Scanner}
-            style={styles.button}
-          >
-            <Text style={{ color: "#FFF", fontSize: 14 }}>
-              Click to scan now
+                Click to scan now
             </Text>
-          </TouchableOpacity>
-        </View>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => this.props.navigation.navigate("add_student")}
+              style={styles.button}
+            >
+              <Text style={{ color: "#FFF", fontSize: 14 }}>
+                Add student
+            </Text>
+            </TouchableOpacity>
+          </Content>
+        </Container>
+
+
+        // </View>
       );
     }
     return (
@@ -262,6 +421,7 @@ const styles = StyleSheet.create({
     marginTop: 12
   },
   button: {
+    marginHorizontal: '9%',
     backgroundColor: "#2979FF",
     alignItems: "center",
     padding: 12,
