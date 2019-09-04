@@ -375,17 +375,17 @@ export default class scanQRScreen extends Component {
           </Header>
 
           <CameraKitCameraScreen
-            // actions={{ rightButtonText: 'Done', leftButtonText: 'Cancel' }}
+            actions={{ rightButtonText: 'Done', leftButtonText: 'Cancel' }}
             showFrame={true}
             scanBarcode={true}
             laserColor={"#FF3D00"}
             frameColor={"#00C853"}
             colorForScannerFrame={"black"}
             onReadCode={event => this.onQR_Code_Scan_Done(event.nativeEvent.codeStringValue)}
-            offsetForScannerFrame={10}   //(default 30) optional, offset from left and right side of the screen
-            heightForScannerFrame={300}  //(default 200) optional, change height of the scanner frame
+            offsetForScannerFrame={20}   //(default 30) optional, offset from left and right side of the screen
+            heightForScannerFrame={400}  //(default 200) optional, change height of the scanner frame
             colorForScannerFrame={'blue'} //(default white) optional, change colot of the scanner frame
-            hideControls={true}           //(default false) optional, hide buttons and additional controls on top and bottom of screen
+            hideControls={false}           //(default false) optional, hide buttons and additional controls on top and bottom of screen
 
           />
           {/* <CameraKitCameraScreen

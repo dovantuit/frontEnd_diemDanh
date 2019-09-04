@@ -12,7 +12,10 @@ import { bindActionCreators } from "redux";
 import { withNavigation } from "react-navigation";
 import { thisExpression } from "@babel/types";
 import axios from "axios";
-const hostApi = `http://10.0.5.180:3000`;
+import Api from "../../../services/config/index";
+
+// const hostApi = `http://10.0.5.180:3000`;
+const hostApi = Api.hostApi
 
 // validation
 const validate = values => {
