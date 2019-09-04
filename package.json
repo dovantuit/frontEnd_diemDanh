@@ -12,6 +12,7 @@
     "react": "16.8.3",
     "react-native": "0.59.9",
     "react-native-camera-kit": "^8.0.1",
+    "react-native-easy-toast": "^1.2.0",
     "react-native-gesture-handler": "^1.4.1",
     "react-native-qrcode": "^0.2.7",
     "react-native-responsive-screen": "^1.2.2",

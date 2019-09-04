@@ -203,7 +203,7 @@ class list_student extends Component {
   render() {
     return (
       <Container style={{ backgroundColor: "ligtgray" }}>
-        <Header>
+        <Header style={{ backgroundColor: "#0086FF" }} androidStatusBarColor="black">
           <Left>
             <Button transparent>
               <TouchableOpacity

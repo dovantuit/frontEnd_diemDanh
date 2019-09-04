@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { scale, verticalScale, moderateScale, WINDOW_SIZE, SPACING_CONSTANTS } from '../../../../src/utils/scale'
-
+import Toast, { DURATION } from 'react-native-easy-toast'
 import {
   View,
   FlatList,
@@ -159,7 +159,8 @@ class menu extends Component {
 
   loadData_google() {
     // ToastAndroid.show("Đang đồng bộ !", ToastAndroid.SHORT);
-    alert('Đang đồng bộ!')
+    // alert('Đang đồng bộ!')
+    this.refs.toast.show('Đang đồng bộ!');
     axios
       .get(`${hostApi}/gg_read`)
 
@@ -181,7 +182,8 @@ class menu extends Component {
               if (dem === 0) {
                 this.addData_SQL_from_GG(row);
               }
-              alert('Đồng bộ thành công!')
+              this.refs.toast.show('Đồng bộ thành công!');
+              // alert('Đồng bộ thành công!')
               // ToastAndroid.show("Đồng bộ thành công!!", ToastAndroid.SHORT);
 
               // this.state.student
@@ -296,6 +298,7 @@ class menu extends Component {
             renderItem={this._renderItem}
           />
         </Content>
+        <Toast ref="toast" />
       </Container>
     );
   }
