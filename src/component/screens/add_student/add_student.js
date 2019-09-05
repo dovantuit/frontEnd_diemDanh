@@ -1,13 +1,10 @@
 import React, { Component } from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
 import { Container, Header, Left, Body, Right, Button, Icon, Title, Content, Form, Item, Input, Label } from 'native-base';
 import axios from 'axios'
 import Format from '../login/style'
-const hostApi = `http://10.0.5.180:3000`;
 import Toast, { DURATION } from 'react-native-easy-toast'
-
-
-
+import api from '../../../services/config/index';
 
 class add_student extends Component {
     constructor(props) {
@@ -25,8 +22,7 @@ class add_student extends Component {
     }
 
     addData_SQL_from_GG = async => {
-        // alert('update now')
-        var url = `${hostApi}/students_add`;
+        var url = `${api.hostApi}/students_add`;
         var data = {
             email: this.state.email,
             full_name: this.state.full_name,
@@ -40,7 +36,6 @@ class add_student extends Component {
 
         fetch(url, {
             method: "POST", // or 'PUT'
-
             headers: {
                 Accept: "application/json",
                 "Content-Type": "application/json"
@@ -49,8 +44,8 @@ class add_student extends Component {
         })
             .then(res => res.json())
             .then(
-                alert('Thêm thành công!'),
-                // this.refs.toast.show(`Thêm thành công!`),
+                // alert('Thêm thành công!'),
+                this.refs.toast.show(`Thêm thành công!`),
 
                 // ToastAndroid.show("Đồng bộ thành công!!", ToastAndroid.SHORT),
                 // console.log("add student Success:", JSON.stringify(response))
@@ -60,13 +55,31 @@ class add_student extends Component {
 
     render() {
         return (
-            <Container>
-                <Header>
-                    {/* <Left> */}
-                    {/* <Icon type="SimpleLineIcons" style={{ fontSize: 25, color: 'white' }} name="login" /> */}
-                    {/* </Left> */}
+            <Container style={{ backgroundColor: "ligtgray" }}>
+                <Header style={{ backgroundColor: "#0086FF" }} androidStatusBarColor="black">
+                    <Left>
+                        <Button transparent>
+                            <TouchableOpacity
+                                onPress={() =>
+                                    this.props.navigation.navigate("list_student", {
+                                        email: this.state.email
+                                    })
+                                }
+                            >
+                                <Icon
+                                    type="AntDesign"
+                                    style={{ fontSize: 25, color: "white" }}
+                                    name="back"
+                                />
+                            </TouchableOpacity>
+
+                            {/* <Icon type="AntDesign" style={{ fontSize: 25, color: 'white' }} name="contacts" /> */}
+
+                            {/* <Text>Back</Text> */}
+                        </Button>
+                    </Left>
                     <Body>
-                        <Title>Add student</Title>
+                        <Title style={{ color: 'white' }}>Add student</Title>
                     </Body>
                     <Right>
                         <Button transparent>

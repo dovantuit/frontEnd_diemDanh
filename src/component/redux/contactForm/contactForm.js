@@ -12,10 +12,12 @@ import { bindActionCreators } from "redux";
 import { withNavigation } from "react-navigation";
 import { thisExpression } from "@babel/types";
 import axios from "axios";
-import Api from "../../../services/config/index";
 
-// const hostApi = `http://10.0.5.180:3000`;
-const hostApi = Api.hostApi
+import api from '../../../services/config/index';
+
+
+// const api.hostApi = `http://10.0.5.180:3000`;
+// const api.hostApi = Api.api.hostApi
 
 // validation
 const validate = values => {
@@ -130,7 +132,7 @@ class ContactComponent extends Component {
 
   async loadData_SQL() {
     axios
-      .get(`${hostApi}/accounts_read`)
+      .get(`${api.hostApi}/accounts_read`)
 
       .then(responseJson => {
         this.setState({
@@ -143,7 +145,7 @@ class ContactComponent extends Component {
   }
   async loadData_SQL_students() {
     axios
-      .get(`${hostApi}/students_read`)
+      .get(`${api.hostApi}/students_read`)
       .then(responseJson => {
         // console.log('list data')
         // console.log(responseJson)
@@ -161,7 +163,7 @@ class ContactComponent extends Component {
 
   // loadData_google() {
   //   axios
-  //     .get(`${hostApi}/gg_read`)
+  //     .get(`${api.hostApi}/gg_read`)
 
   //     .then(responseJson => {
   //       this.setState(
@@ -203,7 +205,7 @@ class ContactComponent extends Component {
     phone_number = student[3];
     address = student[4];
     // alert('update now')
-    var url = `${hostApi}/students_add`;
+    var url = `${api.hostApi}/students_add`;
     var data = {
       email: email,
       full_name: full_name,
@@ -246,7 +248,7 @@ class ContactComponent extends Component {
 
     axios
       .post(
-        `${hostApi}/students_update`,
+        `${api.hostApi}/students_update`,
         {
           id: id,
           attended: "true"

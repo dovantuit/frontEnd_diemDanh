@@ -1,39 +1,16 @@
 import React, { Component } from "react";
 import { scale, verticalScale, moderateScale, WINDOW_SIZE, SPACING_CONSTANTS } from '../../../../src/utils/scale'
-import Toast, { DURATION } from 'react-native-easy-toast'
+import Toast, { DURATION } from 'react-native-easy-toast';
 import {
-  View,
-  FlatList,
-  SafeAreaView,
-  TouchableOpacity,
-  ScrollView,
-  Image,
-  Alert,
-  ToastAndroid,
-  StyleSheet
+  View, FlatList, SafeAreaView, TouchableOpacity, ScrollView, Image, Alert, ToastAndroid, StyleSheet
 } from "react-native";
 import {
-  Container,
-  Header,
-  Left,
-  Body,
-  Right,
-  Button,
-  Icon,
-  Title,
-  Content,
-  Form,
-  Item,
-  Input,
-  Label,
-  List,
-  ListItem,
-  Thumbnail,
-  Text
+  Container, Header, Left, Body, Right, Button, Icon, Title, Content, Form, Item, Input, Label, List, ListItem, Thumbnail, Text
 } from "native-base";
 import QRCode from "react-native-qrcode";
 import axios from "axios";
-const hostApi = `http://10.0.5.180:3000`;
+import api from '../../../services/config/index';
+// const api.hostApi = api.api.hostApi
 import { SectionGrid } from "react-native-super-grid";
 
 // import { ScrollView } from 'react-native-gesture-handler';
@@ -75,7 +52,7 @@ class menu extends Component {
   }
   async loadData_SQL_students() {
     axios
-      .get(`${hostApi}/students_read`)
+      .get(`${api.hostApi}/students_read`)
       .then(responseJson => {
         // console.log('list data')
         // console.log(responseJson)
@@ -96,7 +73,7 @@ class menu extends Component {
     phone_number = student[3];
     address = student[4];
     // alert('update now')
-    var url = `${hostApi}/students_add`;
+    var url = `${api.hostApi}/students_add`;
     var data = {
       email: email,
       full_name: full_name,
@@ -140,7 +117,7 @@ class menu extends Component {
 
     axios
       .post(
-        `${hostApi}/students_update`,
+        `${api.hostApi}/students_update`,
         {
           id: id,
           attended: "true"
@@ -162,7 +139,7 @@ class menu extends Component {
     // alert('Đang đồng bộ!')
     this.refs.toast.show('Đang đồng bộ!');
     axios
-      .get(`${hostApi}/gg_read`)
+      .get(`${api.hostApi}/gg_read`)
 
       .then(responseJson => {
         this.setState(
@@ -201,9 +178,10 @@ class menu extends Component {
         console.error(error);
       });
   }
+
   async loadData_SQL() {
     axios
-      .get(`${hostApi}/accounts_read`)
+      .get(`${api.hostApi}/accounts_read`)
 
       .then(responseJson => {
         this.setState({
@@ -272,20 +250,20 @@ class menu extends Component {
             <Title style={{ color: 'white' }}>Menu</Title>
           </Body>
           <Right>
-            {/* <TouchableOpacity
-              style={{ marginBottom: 5 }}
-              onPress={() => {
-                this.loadData_google();
-              }}
-            >
-              <Icon
-                type="MaterialCommunityIcons"
-                style={{ fontSize: 30, color: "white" }}
-                name="sync"
-              />
-            </TouchableOpacity> */}
-
-            <Button transparent></Button>
+            <Button transparent>
+              <TouchableOpacity
+                style={{ marginBottom: 5 }}
+                onPress={() => {
+                  this.loadData_google();
+                }}
+              >
+                <Icon
+                  type="MaterialCommunityIcons"
+                  style={{ fontSize: 30, color: "white" }}
+                  name="sync"
+                />
+              </TouchableOpacity>
+            </Button>
           </Right>
         </Header>
         <Content style={{ width: "99.8%", paddingLeft: "0.2%" }}>
@@ -298,6 +276,7 @@ class menu extends Component {
             renderItem={this._renderItem}
           />
         </Content>
+
         <Toast ref="toast" />
       </Container>
     );

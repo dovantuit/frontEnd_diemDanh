@@ -32,7 +32,9 @@ import QRCode from "react-native-qrcode";
 import axios from "axios";
 // import Backend from '../../config/Backend';
 // import { ScrollView } from 'react-native-gesture-handler';
-const hostApi = `http://10.0.5.180:3000`;
+import api from '../../../services/config/index';
+
+// const api.hostApi = `http://10.0.5.180:3000`;
 
 class profile extends Component {
     constructor(props) {
@@ -46,7 +48,7 @@ class profile extends Component {
 
     addData_SQL = async (student) => {
         // alert('update now')
-        var url = `${hostApi}/students_add`;
+        var url = `${api.hostApi}/students_add`;
         var data = {
             email: student.email,
             full_name: "full_name",
@@ -74,7 +76,7 @@ class profile extends Component {
 
     async loadData_SQL() {
         axios
-            .get(`${hostApi}/students_read`)
+            .get(`${api.hostApi}/students_read`)
             .then(responseJson => {
                 // console.log('list data')
                 // console.log(responseJson)
@@ -105,7 +107,7 @@ class profile extends Component {
 
         axios
             .post(
-                `${hostApi}/students_update`,
+                `${api.hostApi}/students_update`,
                 {
                     id: id,
                     attended: "true"

@@ -1,38 +1,18 @@
+
+// import Toast, { DURATION } from 'react-native-easy-toast';
+{/* <Toast ref="toast" /> */ }
+// this.refs.toast.show(`Thêm thành công!`)
+
 import React, { Component } from "react";
 import {
-  View,
-  FlatList,
-  SafeAreaView,
-  TouchableOpacity,
-  ScrollView,
-  Image,
-  Alert,
-  ToastAndroid
+  View, FlatList, SafeAreaView, TouchableOpacity, ScrollView, Image, Alert, ToastAndroid
 } from "react-native";
 import {
-  Container,
-  Header,
-  Left,
-  Body,
-  Right,
-  Button,
-  Icon,
-  Title,
-  Content,
-  Form,
-  Item,
-  Input,
-  Label,
-  List,
-  ListItem,
-  Thumbnail,
-  Text
+  Container, Header, Left, Body, Right, Button, Icon, Title, Content, Form, Item, Input, Label, List, ListItem, Thumbnail, Text
 } from "native-base";
-import QRCode from "react-native-qrcode";
 import axios from "axios";
-// import Backend from '../../config/Backend';
-// import { ScrollView } from 'react-native-gesture-handler';
-const hostApi = `http://10.0.5.180:3000`;
+import api from '../../../services/config/index';
+import Toast, { DURATION } from 'react-native-easy-toast';
 
 class list_student extends Component {
   constructor(props) {
@@ -45,8 +25,8 @@ class list_student extends Component {
   }
 
   addData_SQL = async () => {
-    // alert('update now')
-    var url = `${hostApi}/students_add`;
+    this.refs.toast.show(`Updating!`)
+    var url = `${api.hostApi}/students_add`;
     var data = {
       email: "email",
       full_name: "full_name",
@@ -60,7 +40,6 @@ class list_student extends Component {
 
     fetch(url, {
       method: "POST", // or 'PUT'
-
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json"
@@ -74,10 +53,8 @@ class list_student extends Component {
 
   async loadData_SQL() {
     axios
-      .get(`${hostApi}/students_read`)
+      .get(`${api.hostApi}/students_read`)
       .then(responseJson => {
-        // console.log('list data')
-        // console.log(responseJson)
         this.setState(
           {
             students: responseJson.data.students
@@ -93,19 +70,12 @@ class list_student extends Component {
   async updateData_SQL1(id) {
     var data = {
       id: id,
-      // email: 'ttttttttttttttt',
-      // full_name: 'full_name',
-      // phone_number: 'phone_number',
-      // address: 'address',
       attended: true
-      // createBy: 'createBy',
-      // updateBy: 'updateBy',
-      // is_delete: false,
     };
 
     axios
       .post(
-        `${hostApi}/students_update`,
+        `${api.hostApi}/students_update`,
         {
           id: id,
           attended: "true"
@@ -114,7 +84,6 @@ class list_student extends Component {
           headers: {
             "api-Accept": "application/json",
             "Content-Type": "application/json"
-            //other header fields
           }
         }
       )
@@ -137,11 +106,13 @@ class list_student extends Component {
 
   async diemDanh(id) {
     await this.updateData_SQL1(id);
-    await this.props.navigation.navigate("menu", {
-      email: this.state.email
-    });
+    // await this.props.navigation.navigate("menu", {
+    //   email: this.state.email
+    // });
     // alert('đã điểm danh ')
-    ToastAndroid.show("Đã điểm danh !!", ToastAndroid.SHORT);
+    this.refs.toast.show(`Đã điểm danh !!`);
+
+    // ToastAndroid.show("Đã điểm danh !!", ToastAndroid.SHORT);
   }
   taoQR = student => {
     var prepare_text_code = { "email": student.email, "phone_number": student.phone_number, "full_name:": student.full_name }
@@ -158,46 +129,71 @@ class list_student extends Component {
   renderList = student => {
     if (student.attended == true) {
       return (
-        <List>
-          <ListItem avatar>
-            <Body>
-              <TouchableOpacity onPress={() => this.taoQR(student)}>
-                <Text>{student.full_name}</Text>
-              </TouchableOpacity>
-              <Text note>{student.email}</Text>
-            </Body>
-            <Right>
-              <Text note>đã tham dự</Text>
-            </Right>
-          </ListItem>
-        </List>
+        <ListItem avatar>
+          <Left>
+            <Thumbnail source={{ uri: `https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT9BjeQGUSCx149zAAEW_uZUeAOQIsieFtozn_1t9GNYeuL0ahl0Q` }} />
+          </Left>
+          <Body>
+            <TouchableOpacity onPress={() => this.taoQR(student)}>
+              <Text>{student.full_name}</Text>
+            </TouchableOpacity>
+            <Text note style={{ width: 150 }}
+              numberOfLines={2}
+              ellipsizeMode='tail'>
+              {student.email + "\n"}
+            </Text>
+          </Body>
+          <Right>
+            <Text note>đã tham dự</Text>
+          </Right>
+        </ListItem>
       );
     } else {
       return (
-        <List>
-          <ListItem avatar>
-            <Body>
-              <TouchableOpacity
-                // onPress={() => alert(`id:${student.id},email: ${student.email}, phone: ${student.phone_number}`)}
-                onPress={() => this.taoQR(student)}
-              >
-                <Text>{student.full_name}</Text>
-              </TouchableOpacity>
-              <Text note>{student.email}</Text>
-            </Body>
-            <Right>
-              <Text note>chưa tham dự</Text>
-              <TouchableOpacity
-                style={{ borderRadius: 5, backgroundColor: "orange" }}
-                onPress={() => {
-                  this.diemDanh(student.id);
-                }}
-              >
-                <Text note>điểm danh</Text>
-              </TouchableOpacity>
-            </Right>
-          </ListItem>
-        </List>
+        <ListItem avatar>
+          <Left>
+            <Thumbnail source={{ uri: `https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT9BjeQGUSCx149zAAEW_uZUeAOQIsieFtozn_1t9GNYeuL0ahl0Q` }} />
+          </Left>
+          <Body>
+            <TouchableOpacity
+              onPress={() => this.taoQR(student)}
+            >
+              <Text>{student.full_name}</Text>
+            </TouchableOpacity>
+            <Text note style={{ width: 150 }}
+              numberOfLines={2}
+              ellipsizeMode='tail'>
+              {student.email + "\n"}
+            </Text>
+          </Body>
+          <Right>
+            <Text note>chưa tham dự</Text>
+            <TouchableOpacity
+              onPress={() => {
+                this.diemDanh(student.id);
+              }}
+            >
+              <Icon
+                // style={{ marginTop: -10, }}
+                type="MaterialCommunityIcons"
+                style={{ fontSize: 30, color: "green" }}
+                name="checkbox-marked-outline"
+              />
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                this.diemDanh(student.id);
+              }}
+            >
+              <Icon
+                style={{ marginLeft: -20, }}
+                type="MaterialCommunityIcons"
+                style={{ fontSize: 30, color: "green" }}
+                name="checkbox-marked-outline"
+              />
+            </TouchableOpacity>
+          </Right>
+        </ListItem>
       );
     }
   };
@@ -221,39 +217,48 @@ class list_student extends Component {
                   name="back"
                 />
               </TouchableOpacity>
-
-              {/* <Icon type="AntDesign" style={{ fontSize: 25, color: 'white' }} name="contacts" /> */}
-
-              {/* <Text>Back</Text> */}
             </Button>
           </Left>
           <Body>
             <Title style={{ color: 'white' }}>Students list</Title>
           </Body>
           <Right>
-            {/* <Button transparent> */}
-            {/* <TouchableOpacity style={{ borderRadius: 5, backgroundColor: 'orange' }} onPress={() => { this.diemDanh(student.id) }}><Text note>điểm danh</Text></TouchableOpacity> */}
-
-            {/* <Icon onPress={() => { */}
-            {/* Alert.alert('Notice!', */}
-            {/* `Bạn đang đăng nhập bằng tài khoản: ${this.state.email}`, */}
-            {/* [ */}
-            {/* { text: 'Okay', onPress: () => console.log('okie') } */}
-            {/* ]) */}
-            {/* }} type="MaterialCommunityIcons" style={{ fontSize: 25, color: 'white' }} name="face-profile" /> */}
-            {/* <Text>Profile</Text> */}
-            {/* </Button> */}
+            <Button transparent>
+              <TouchableOpacity onPress={() => { this.diemDanh(student.id) }}>
+                <Icon onPress={() => {
+                  this.refs.toast.show(`Mailing!`)
+                }} type="MaterialIcons" style={{ fontSize: 30, color: 'white' }} name="email" />
+              </TouchableOpacity>
+            </Button>
+            <Button transparent>
+              <TouchableOpacity onPress={() => { this.diemDanh(student.id) }}>
+                <Icon onPress={() => {
+                  this.props.navigation.navigate("add_student")
+                }} type="AntDesign" style={{ fontSize: 30, color: 'white' }} name="adduser" />
+              </TouchableOpacity>
+            </Button>
           </Right>
         </Header>
         <Content style={{ width: "99.8%", paddingLeft: "0.2%" }}>
           <ScrollView>
-            <FlatList
-              style={{ marginBottom: 1 }}
-              data={this.state.students}
-              renderItem={({ item }, index) => this.renderList(item)}
-              column={1}
-            />
+            <List>
+              <FlatList
+                style={{ marginBottom: 1 }}
+                data={this.state.students}
+                renderItem={({ item }, index) => this.renderList(item)}
+                column={1}
+              />
+            </List>
           </ScrollView>
+          <Toast ref="toast"
+            // style={{ backgroundColor: 'red' }}
+            // position='bottom'
+            // positionValue={200}
+            fadeInDuration={750}
+            fadeOutDuration={1000}
+            opacity={0.9}
+          // textStyle={{ color: 'white' }}
+          />
         </Content>
       </Container>
     );

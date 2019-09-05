@@ -4,8 +4,9 @@ import QRCode from "react-native-qrcode";
 
 import { AppRegistry, StyleSheet, View, TextInput, Text } from "react-native";
 import { bold } from "ansi-colors";
+import api from '../../../services/config/index';
 
-const hostApi = `http://10.0.5.180:3000`;
+// const api.hostApi = `http://10.0.5.180:3000`;
 
 export default class codeGenerateScreen extends Component {
   state = {

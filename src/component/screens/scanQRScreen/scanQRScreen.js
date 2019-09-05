@@ -21,7 +21,9 @@ import {
   Content
 } from "native-base";
 import axios from "axios";
-const hostApi = `http://10.0.5.180:3000`;
+// const api.hostApi = `http://10.0.5.180:3000`;
+import api from '../../../services/config/index';
+
 import Toast, { DURATION } from 'react-native-easy-toast'
 
 
@@ -40,7 +42,7 @@ export default class scanQRScreen extends Component {
   }
 
   async loadData_SQL() {
-    fetch(`${hostApi}/students_read`)
+    fetch(`${api.hostApi}/students_read`)
       .then(response => response.json())
       .then(responseJson => {
         // console.log(responseJson)
@@ -56,7 +58,7 @@ export default class scanQRScreen extends Component {
       });
   }
   async updateData_SQL1(id) {
-    // this.refs.toast.show('đã đỉêm danh!');e
+    // this.refs.toast.show('đã đỉêm danh!');
     alert('checked done!')
 
     var data = {
@@ -73,7 +75,7 @@ export default class scanQRScreen extends Component {
 
     axios
       .post(
-        `${hostApi}/students_update`,
+        `${api.hostApi}/students_update`,
         {
           id: id,
           attended: "true"
@@ -91,7 +93,7 @@ export default class scanQRScreen extends Component {
   }
   // async loadData_SQL_students() {
   //   axios
-  //     .get(`${hostApi}/students_read`)
+  //     .get(`${api.hostApi}/students_read`)
   //     .then(responseJson => {
   //       // console.log('list data')
   //       // console.log(responseJson)
@@ -112,7 +114,7 @@ export default class scanQRScreen extends Component {
   //   phone_number = student[3];
   //   address = student[4];
   //   // alert('update now')
-  //   var url = `${hostApi}/students_add`;
+  //   var url = `${api.hostApi}/students_add`;
   //   var data = {
   //     email: email,
   //     full_name: full_name,
@@ -147,7 +149,7 @@ export default class scanQRScreen extends Component {
   //   // alert('Đang đồng bộ!')
   //   this.refs.toast.show('Đang đồng bộ!');
   //   axios
-  //     .get(`${hostApi}/gg_read`)
+  //     .get(`${api.hostApi}/gg_read`)
 
   //     .then(responseJson => {
   //       this.setState(
@@ -218,7 +220,7 @@ export default class scanQRScreen extends Component {
 
   addData_SQL = async (student) => {
     alert('update now')
-    var url = `${hostApi}/students_add`;
+    var url = `${api.hostApi}/students_add`;
     var data = {
       email: student.email,
       full_name: student.full_name,
@@ -312,7 +314,6 @@ export default class scanQRScreen extends Component {
             </Body>
             <Right />
           </Header>
-          <Toast ref="toast" />
 
           {/* ////////////////////////////////////////////////////// */}
           <Content>
@@ -340,7 +341,11 @@ export default class scanQRScreen extends Component {
                 Add student
             </Text>
             </TouchableOpacity>
+            <Toast ref="toast" />
+
           </Content>
+          <Toast ref="toast" />
+
         </Container>
 
 
@@ -380,11 +385,11 @@ export default class scanQRScreen extends Component {
             scanBarcode={true}
             laserColor={"#FF3D00"}
             frameColor={"#00C853"}
-            colorForScannerFrame={"black"}
+            // colorForScannerFrame={"black"}
             onReadCode={event => this.onQR_Code_Scan_Done(event.nativeEvent.codeStringValue)}
-            offsetForScannerFrame={20}   //(default 30) optional, offset from left and right side of the screen
+            offsetForScannerFrame={30}   //(default 30) optional, offset from left and right side of the screen
             heightForScannerFrame={400}  //(default 200) optional, change height of the scanner frame
-            colorForScannerFrame={'blue'} //(default white) optional, change colot of the scanner frame
+            // colorForScannerFrame={'blue'} //(default white) optional, change colot of the scanner frame
             hideControls={false}           //(default false) optional, hide buttons and additional controls on top and bottom of screen
 
           />

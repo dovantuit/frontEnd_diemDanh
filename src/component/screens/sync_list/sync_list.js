@@ -1,38 +1,20 @@
 import React, { Component } from "react";
 import {
-    View,
-    FlatList,
-    SafeAreaView,
-    TouchableOpacity,
-    ScrollView,
-    Image,
-    Alert,
-    ToastAndroid
+    View, FlatList, SafeAreaView, TouchableOpacity, ScrollView, Image, Alert, ToastAndroid
 } from "react-native";
 import {
-    Container,
-    Header,
-    Left,
-    Body,
-    Right,
-    Button,
-    Icon,
-    Title,
-    Content,
-    Form,
-    Item,
-    Input,
-    Label,
-    List,
-    ListItem,
-    Thumbnail,
-    Text
+    Container, Header, Left, Body, Right, Button, Icon, Title, Content, Form, Item, Input, Label, List, ListItem, Thumbnail, Text
 } from "native-base";
-import QRCode from "react-native-qrcode";
 import axios from "axios";
 // import Backend from '../../config/Backend';
 // import { ScrollView } from 'react-native-gesture-handler';
-const hostApi = `http://10.0.5.180:3000`;
+// const api.hostApi = `http://10.0.5.180:3000`;
+import api from '../../../services/config/index';
+
+import Toast, { DURATION } from 'react-native-easy-toast';
+{/* <Toast ref="toast" /> */ }
+// this.refs.toast.show(`Thêm thành công!`)
+
 
 class sync_list extends Component {
     constructor(props) {
@@ -44,14 +26,81 @@ class sync_list extends Component {
         };
     }
 
-    addData_SQL = async () => {
+    async loadData_SQL_students() {
+        axios
+            .get(`${api.hostApi}/students_read`)
+            .then(responseJson => {
+                // console.log('list data')
+                // console.log(responseJson)
+                this.setState(
+                    {
+                        students: responseJson.data.students
+                    },
+                    () => console.log(this.state.students)
+                );
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    }
+
+    loadData_google() {
+        // ToastAndroid.show("Đang đồng bộ !", ToastAndroid.SHORT);
+        // alert('Đang đồng bộ!')
+        this.refs.toast.show('Đang đồng bộ!');
+        axios
+            .get(`${api.hostApi}/gg_read`)
+
+            .then(responseJson => {
+                this.setState(
+                    {
+                        google_data: responseJson.data.rows.values
+                    },
+                    () => {
+                        var dem = 0;
+                        this.state.google_data.map(row => {
+                            this.state.students.map(student => {
+                                // dem = 0;
+                                if (student.email === row[1]) {
+                                    dem = 1;
+                                    // alert("trung");
+                                }
+                            });
+                            if (dem === 0) {
+                                this.addData_SQL_from_GG(row);
+                            }
+                            this.refs.toast.show('Đồng bộ thành công!');
+                            // alert('Đồng bộ thành công!')
+                            // ToastAndroid.show("Đồng bộ thành công!!", ToastAndroid.SHORT);
+
+                            // this.state.student
+                            //   var email = row[1];
+                            //   var full_name = row[2];
+                            //   var phone_number = row[3];
+                            //   var address = row[4];
+                            //   alert(phone_number);
+                            // this.addData_SQL_from_GG(row);
+                        });
+                    }
+                );
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    }
+
+    addData_SQL_from_GG = async student => {
+        email = student[1];
+        full_name = student[2];
+        phone_number = student[3];
+        address = student[4];
         // alert('update now')
-        var url = `${hostApi}/students_add`;
+        var url = `${api.hostApi}/students_add`;
         var data = {
-            email: "email",
-            full_name: "full_name",
-            phone_number: "phone_number",
-            address: "address",
+            email: email,
+            full_name: full_name,
+            phone_number: phone_number,
+            address: address,
             attended: "attended",
             createBy: "createBy",
             updateBy: "updateBy",
@@ -68,29 +117,14 @@ class sync_list extends Component {
             body: JSON.stringify(data) // data can be `string` or {object}!
         })
             .then(res => res.json())
-            .then(response => console.log("Success:", JSON.stringify(response)))
+            .then(
+                // ToastAndroid.show("Đồng bộ thành công!!", ToastAndroid.SHORT),
+                console.log("add student Success:", JSON.stringify(response))
+            )
             .catch(error => console.error("Error:", error));
     };
 
-    async loadData_SQL() {
-        axios
-            .get(`${hostApi}/students_read`)
-            .then(responseJson => {
-                // console.log('list data')
-                // console.log(responseJson)
-                this.setState(
-                    {
-                        students: responseJson.data.students
-                    },
-                    () => console.log(this.state.students)
-                );
-            })
-            .catch(error => {
-                console.error(error);
-            });
-    }
-
-    async updateData_SQL1(id) {
+    async updateData_SQL_from_google() {
         var data = {
             id: id,
             // email: 'ttttttttttttttt',
@@ -105,7 +139,7 @@ class sync_list extends Component {
 
         axios
             .post(
-                `${hostApi}/students_update`,
+                `${api.hostApi}/students_update`,
                 {
                     id: id,
                     attended: "true"
@@ -122,20 +156,24 @@ class sync_list extends Component {
             .catch(error => console.error("Error:", error));
     }
 
+
+
     componentWillMount() {
 
     }
 
     componentDidMount() {
-        this.loadData_SQL();
+        this.loadData_SQL_students();
     }
 
     async diemDanh(id) {
-        await this.updateData_SQL1(id);
-        await this.props.navigation.navigate("menu", {
-            email: this.state.email
-        });
-        alert('đã điểm danh ')
+        // await this.updateData_SQL1(id);
+        // await this.props.navigation.navigate("menu", {
+        //     email: this.state.email
+        // });
+        // alert('đã điểm danh ')
+        this.refs.toast.show(`đã điểm danh!`)
+
         // ToastAndroid.show("Đã điểm danh !!", ToastAndroid.SHORT);
     }
     taoQR = student => {
@@ -216,29 +254,26 @@ class sync_list extends Component {
                                 />
                             </TouchableOpacity>
 
-                            {/* <Icon type="AntDesign" style={{ fontSize: 25, color: 'white' }} name="contacts" /> */}
-
-                            {/* <Text>Back</Text> */}
                         </Button>
                     </Left>
                     <Body>
                         <Title style={{ color: 'white' }}> Đồng bộ</Title>
                     </Body>
                     <Right>
-                        <TouchableOpacity
-                            style={{ marginBottom: 5 }}
-                            onPress={() => {
-                                alert('hello')
-                            }}
-                        >
-                            <Icon
-                                type="MaterialCommunityIcons"
-                                style={{ fontSize: 30, color: "white" }}
-                                name="sync"
-                            />
-                        </TouchableOpacity>
-
-                        <Button transparent></Button>
+                        <Button transparent>
+                            <TouchableOpacity
+                                style={{ marginBottom: 5 }}
+                                onPress={() => {
+                                    this.loadData_google();
+                                }}
+                            >
+                                <Icon
+                                    type="MaterialCommunityIcons"
+                                    style={{ fontSize: 30, color: "white" }}
+                                    name="sync"
+                                />
+                            </TouchableOpacity>
+                        </Button>
                     </Right>
                 </Header>
                 <Content style={{ width: "99.8%", paddingLeft: "0.2%" }}>
@@ -250,6 +285,7 @@ class sync_list extends Component {
                             column={1}
                         />
                     </ScrollView>
+                    <Toast ref="toast" />
                 </Content>
             </Container>
         );
