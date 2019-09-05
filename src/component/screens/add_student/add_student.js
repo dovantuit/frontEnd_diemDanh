@@ -31,7 +31,8 @@ class add_student extends Component {
             attended: "attended",
             createBy: "createBy",
             updateBy: "updateBy",
-            is_delete: false
+            is_delete: false,
+            is_sentMail: false
         };
 
         fetch(url, {
@@ -92,7 +93,6 @@ class add_student extends Component {
                         <Item stackedLabel>
                             <Label>Email</Label>
                             <Input onChangeText={email => this.setState({ email })} />
-
                         </Item>
                         <Item stackedLabel last>
                             <Label>Full name</Label>
@@ -113,7 +113,15 @@ class add_student extends Component {
                     >
                         <Text style={Format.button_text}>ADD</Text>
                     </Button>
-                    <Toast ref="toast" />
+                    <Toast ref="toast"
+                        // style={{ backgroundColor: 'red' }}
+                        position='top'
+                        // positionValue={200}
+                        fadeInDuration={750}
+                        fadeOutDuration={1000}
+                        opacity={0.9}
+                    // textStyle={{ color: 'white' }}
+                    />
 
                 </Content>
             </Container>

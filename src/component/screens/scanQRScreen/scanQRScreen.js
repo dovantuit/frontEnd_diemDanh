@@ -1,24 +1,10 @@
 import {
-  StyleSheet,
-  View,
-  Text,
-  Platform,
-  TouchableOpacity,
-  Linking,
-  PermissionsAndroid, Alert
+  StyleSheet, View, Text, Platform, TouchableOpacity, Linking, PermissionsAndroid, Alert
 } from "react-native";
 import React, { Component } from "react";
 import { CameraKitCameraScreen } from "react-native-camera-kit";
 import {
-  Container,
-  Header,
-  Left,
-  Body,
-  Right,
-  Title,
-  Button,
-  Icon,
-  Content
+  Container, Header, Left, Body, Right, Title, Button, Icon, Content
 } from "native-base";
 import axios from "axios";
 // const api.hostApi = `http://10.0.5.180:3000`;
@@ -34,8 +20,7 @@ export default class scanQRScreen extends Component {
 
     this.state = {
       QR_Code_Value: "",
-
-      Start_Scanner: false,
+      Start_Scanner: true,
       students: [],
       email: ""
     };
@@ -123,7 +108,8 @@ export default class scanQRScreen extends Component {
   //     attended: "attended",
   //     createBy: "createBy",
   //     updateBy: "updateBy",
-  //     is_delete: false
+  //     is_delete: false,
+  // is_sentMail: false
   //   };
 
   //   fetch(url, {
@@ -189,9 +175,6 @@ export default class scanQRScreen extends Component {
     console.log(student_object)
 
 
-
-
-
     var ton_tai = false;
     var id_tontai = "";
     this.state.students.map(that_student => {
@@ -229,7 +212,8 @@ export default class scanQRScreen extends Component {
       attended: "false",
       createBy: "createBy",
       updateBy: "updateBy",
-      is_delete: false
+      is_delete: false,
+      is_sentMail: false
     };
 
     fetch(url, {
@@ -246,9 +230,9 @@ export default class scanQRScreen extends Component {
       .catch(error => console.error("Error:", error));
   };
 
-  // openLink_in_browser = () => {
-  //   Linking.openURL(this.state.QR_Code_Value);
-  // };
+  openLink_in_browser = () => {
+    Linking.openURL(this.state.QR_Code_Value);
+  };
 
   onQR_Code_Scan_Done = async QR_Code => {
     await this.setState({ QR_Code_Value: QR_Code });
@@ -324,6 +308,13 @@ export default class scanQRScreen extends Component {
                 ? "value: " + this.state.QR_Code_Value
                 : ""}
             </Text>
+            {this.state.QR_Code_Value.includes("http") ?
+              <TouchableOpacity
+                onPress={this.openLink_in_browser}
+                style={styles.button}>
+                <Text style={{ color: '#FFF', fontSize: 14 }}>Open Link in default Browser</Text>
+              </TouchableOpacity> : null
+            }
 
             <TouchableOpacity
               onPress={this.open_QR_Code_Scanner}
@@ -333,19 +324,9 @@ export default class scanQRScreen extends Component {
                 Click to scan now
             </Text>
             </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => this.props.navigation.navigate("add_student")}
-              style={styles.button}
-            >
-              <Text style={{ color: "#FFF", fontSize: 14 }}>
-                Add student
-            </Text>
-            </TouchableOpacity>
             <Toast ref="toast" />
 
           </Content>
-          <Toast ref="toast" />
-
         </Container>
 
 
@@ -380,16 +361,16 @@ export default class scanQRScreen extends Component {
           </Header>
 
           <CameraKitCameraScreen
-            actions={{ rightButtonText: 'Done', leftButtonText: 'Cancel' }}
+            // actions={{ rightButtonText: 'Done', leftButtonText: 'Cancel' }}
             showFrame={true}
             scanBarcode={true}
-            laserColor={"#FF3D00"}
-            frameColor={"#00C853"}
-            // colorForScannerFrame={"black"}
+            laserColor={"blue"}
+            frameColor={"yellow"}
             onReadCode={event => this.onQR_Code_Scan_Done(event.nativeEvent.codeStringValue)}
+            onReadQRCode={((event) => this.onQR_Code_Scan_Done(event.nativeEvent.codeStringValue))} //optional
             offsetForScannerFrame={30}   //(default 30) optional, offset from left and right side of the screen
             heightForScannerFrame={400}  //(default 200) optional, change height of the scanner frame
-            // colorForScannerFrame={'blue'} //(default white) optional, change colot of the scanner frame
+            colorForScannerFrame={'red'} //(default white) optional, change colot of the scanner frame
             hideControls={false}           //(default false) optional, hide buttons and additional controls on top and bottom of screen
 
           />

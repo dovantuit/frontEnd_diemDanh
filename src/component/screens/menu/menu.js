@@ -82,7 +82,8 @@ class menu extends Component {
       attended: "attended",
       createBy: "createBy",
       updateBy: "updateBy",
-      is_delete: false
+      is_delete: false,
+      is_sentMail: false
     };
 
     fetch(url, {

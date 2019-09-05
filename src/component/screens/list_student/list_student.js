@@ -5,7 +5,7 @@
 
 import React, { Component } from "react";
 import {
-  View, FlatList, SafeAreaView, TouchableOpacity, ScrollView, Image, Alert, ToastAndroid
+  View, FlatList, SafeAreaView, TouchableOpacity, ScrollView, Image, Alert, ToastAndroid, RefreshControl, ActivityIndicator
 } from "react-native";
 import {
   Container, Header, Left, Body, Right, Button, Icon, Title, Content, Form, Item, Input, Label, List, ListItem, Thumbnail, Text
@@ -20,7 +20,9 @@ class list_student extends Component {
     this.state = {
       students: [],
       email: "",
-      lastRefresh: Date(Date.now()).toString()
+      lastRefresh: Date(Date.now()).toString(),
+      isRefreshing: false, //for pull to refresh,
+      loading: false,
     };
   }
 
@@ -35,7 +37,8 @@ class list_student extends Component {
       attended: "attended",
       createBy: "createBy",
       updateBy: "updateBy",
-      is_delete: false
+      is_delete: false,
+      is_sentMail: false
     };
 
     fetch(url, {
@@ -52,17 +55,20 @@ class list_student extends Component {
   };
 
   async loadData_SQL() {
+    this.setState({ loading: true })
     axios
       .get(`${api.hostApi}/students_read`)
       .then(responseJson => {
         this.setState(
           {
-            students: responseJson.data.students
+            students: responseJson.data.students,
+            loading: false
           },
           () => console.log(this.state.students)
         );
       })
       .catch(error => {
+        this.setState({ loading: false })
         console.error(error);
       });
   }
@@ -90,8 +96,91 @@ class list_student extends Component {
       .then(response => console.log("Success:", JSON.stringify(response)))
       .catch(error => console.error("Error:", error));
   }
+  /// gửi mai báo cáo
+  sent_report_mail_attend = async email => {
+
+    var data_student_checked = [];
+    this.state.students.map(student => {
+      if (student.attended === true) {
+        data_student_checked.push(student)
+      }
+    })
+
+    // alert('update now')
+    var url = `${api.hostApi}/report_mail`;
+    var data = {
+      email: email,
+      data: data_student_checked
+      //   full_name: full_name,
+      //   phone_number: phone_number,
+      //   address: address,
+      //   attended: "attended",
+      //   createBy: "createBy",
+      //   updateBy: "updateBy",
+      //   is_delete: false
+    };
+
+    fetch(url, {
+      method: "POST", // or 'PUT'
+
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(data) // data can be `string` or {object}!
+    })
+      .then(res => res.json())
+      .then(
+        this.refs.toast.show(`mail thành công!`),
+
+        console.log("add student Success:", JSON.stringify(response))
+      )
+      .catch(error => console.error("Error:", error));
+  };
+
+  sent_report_mail_miss = async email => {
+
+    var data_student_checked = [];
+    this.state.students.map(student => {
+      if (student.attended === false) {
+        data_student_checked.push(student)
+      }
+    })
+
+    // alert('update now')
+    var url = `${api.hostApi}/report_mail`;
+    var data = {
+      email: email,
+      data: data_student_checked
+      //   full_name: full_name,
+      //   phone_number: phone_number,
+      //   address: address,
+      //   attended: "attended",
+      //   createBy: "createBy",
+      //   updateBy: "updateBy",
+      //   is_delete: false
+    };
+
+    fetch(url, {
+      method: "POST", // or 'PUT'
+
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(data) // data can be `string` or {object}!
+    })
+      .then(res => res.json())
+      .then(
+        this.refs.toast.show(`mail thành công!`),
+
+        console.log("add student Success:", JSON.stringify(response))
+      )
+      .catch(error => console.error("Error:", error));
+  };
 
   componentWillMount() {
+    this.loadData_SQL();
     this.setState(
       {
         email: this.props.navigation.state.params.email
@@ -101,18 +190,11 @@ class list_student extends Component {
   }
 
   componentDidMount() {
-    this.loadData_SQL();
   }
 
   async diemDanh(id) {
     await this.updateData_SQL1(id);
-    // await this.props.navigation.navigate("menu", {
-    //   email: this.state.email
-    // });
-    // alert('đã điểm danh ')
     this.refs.toast.show(`Đã điểm danh !!`);
-
-    // ToastAndroid.show("Đã điểm danh !!", ToastAndroid.SHORT);
   }
   taoQR = student => {
     var prepare_text_code = { "email": student.email, "phone_number": student.phone_number, "full_name:": student.full_name }
@@ -145,6 +227,11 @@ class list_student extends Component {
           </Body>
           <Right>
             <Text note>đã tham dự</Text>
+            <Icon
+              type="SimpleLineIcons"
+              style={{ fontSize: 30, color: "green" }}
+              name="check"
+            />
           </Right>
         </ListItem>
       );
@@ -175,12 +262,12 @@ class list_student extends Component {
             >
               <Icon
                 // style={{ marginTop: -10, }}
-                type="MaterialCommunityIcons"
-                style={{ fontSize: 30, color: "green" }}
-                name="checkbox-marked-outline"
+                type="SimpleLineIcons"
+                style={{ fontSize: 30, color: "red" }}
+                name="check"
               />
             </TouchableOpacity>
-            <TouchableOpacity
+            {/* <TouchableOpacity
               onPress={() => {
                 this.diemDanh(student.id);
               }}
@@ -191,7 +278,7 @@ class list_student extends Component {
                 style={{ fontSize: 30, color: "green" }}
                 name="checkbox-marked-outline"
               />
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </Right>
         </ListItem>
       );
@@ -199,6 +286,18 @@ class list_student extends Component {
   };
 
   render() {
+    if (this.state.loading) {
+      return <View style={{
+        width: '100%',
+        height: '100%'
+      }}>
+        <Text></Text>
+        <Text></Text>
+        <Text></Text>
+        <Text></Text>
+        <ActivityIndicator style={{ fontSize: 500, color: '#000' }} />
+      </View>;
+    }
     return (
       <Container style={{ backgroundColor: "ligtgray" }}>
         <Header style={{ backgroundColor: "#0086FF" }} androidStatusBarColor="black">
@@ -226,7 +325,13 @@ class list_student extends Component {
             <Button transparent>
               <TouchableOpacity onPress={() => { this.diemDanh(student.id) }}>
                 <Icon onPress={() => {
-                  this.refs.toast.show(`Mailing!`)
+                  // this.sent_report_mail(`dovantuit@gmail.com`)
+
+                  Alert.alert("Pick report!", `  `, [
+                    { text: "Checked student", onPress: () => { this.sent_report_mail_attend(`dovantuit@gmail.com`) } },
+                    { text: 'missed student', onPress: () => { this.sent_report_mail_miss(`dovantuit@gmail.com`) } },
+                    { text: 'cancel', onPress: () => console.log('CANCEL') }
+                  ], { cancelable: true });
                 }} type="MaterialIcons" style={{ fontSize: 30, color: 'white' }} name="email" />
               </TouchableOpacity>
             </Button>
@@ -245,8 +350,17 @@ class list_student extends Component {
               <FlatList
                 style={{ marginBottom: 1 }}
                 data={this.state.students}
+                extraData={this.state}
+                refreshControl={
+                  <RefreshControl
+                    refreshing={this.state.isRefreshing}
+                    onRefresh={this.loadData_SQL.bind(this)}
+                  />
+                }
                 renderItem={({ item }, index) => this.renderList(item)}
                 column={1}
+              // onEndReachedThreshold={0.4}
+              // onEndReached={() => this.refs.toast.show(`Load more`)}
               />
             </List>
           </ScrollView>
