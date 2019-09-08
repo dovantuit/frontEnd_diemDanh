@@ -285,8 +285,17 @@ class sync_list extends Component {
                             renderItem={({ item }, index) => this.renderList(item)}
                             column={1}
                         />
+                        <Toast ref="toast"
+                            // style={{ backgroundColor: 'red' }}
+                            position='top'
+                            // positionValue={200}
+                            fadeInDuration={750}
+                            fadeOutDuration={1000}
+                            opacity={0.9}
+                        // textStyle={{ color: 'white' }}
+                        />
                     </ScrollView>
-                    <Toast ref="toast" />
+
                 </Content>
             </Container>
         );

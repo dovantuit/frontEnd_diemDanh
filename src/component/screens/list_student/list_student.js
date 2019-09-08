@@ -28,6 +28,8 @@ class list_student extends Component {
 
   addData_SQL = async () => {
     this.refs.toast.show(`Updating!`)
+    ToastAndroid.show("Updating!!", ToastAndroid.SHORT)
+
     var url = `${api.hostApi}/students_add`;
     var data = {
       email: "email",
@@ -173,6 +175,8 @@ class list_student extends Component {
       .then(res => res.json())
       .then(
         this.refs.toast.show(`mail thành công!`),
+        ToastAndroid.show("Mail success!!", ToastAndroid.SHORT),
+
 
         console.log("add student Success:", JSON.stringify(response))
       )
@@ -195,6 +199,8 @@ class list_student extends Component {
   async diemDanh(id) {
     await this.updateData_SQL1(id);
     this.refs.toast.show(`Đã điểm danh !!`);
+    ToastAndroid.show("Checked done!!", ToastAndroid.SHORT)
+
   }
   taoQR = student => {
     var prepare_text_code = { "email": student.email, "phone_number": student.phone_number, "full_name:": student.full_name }
@@ -291,10 +297,7 @@ class list_student extends Component {
         width: '100%',
         height: '100%'
       }}>
-        <Text></Text>
-        <Text></Text>
-        <Text></Text>
-        <Text></Text>
+        <Text style={{ marginVertical: 50 }}>.</Text>
         <ActivityIndicator style={{ fontSize: 500, color: '#000' }} />
       </View>;
     }
@@ -362,11 +365,20 @@ class list_student extends Component {
               // onEndReachedThreshold={0.4}
               // onEndReached={() => this.refs.toast.show(`Load more`)}
               />
+              <Toast ref="toast"
+                // style={{ backgroundColor: 'red' }}
+                position='top'
+                // positionValue={200}
+                fadeInDuration={750}
+                fadeOutDuration={1000}
+                opacity={0.9}
+              // textStyle={{ color: 'white' }}
+              />
             </List>
           </ScrollView>
           <Toast ref="toast"
             // style={{ backgroundColor: 'red' }}
-            // position='bottom'
+            position='top'
             // positionValue={200}
             fadeInDuration={750}
             fadeOutDuration={1000}

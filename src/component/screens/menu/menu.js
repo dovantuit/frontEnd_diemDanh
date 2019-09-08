@@ -237,15 +237,14 @@ class menu extends Component {
       <Container style={{ backgroundColor: "ligtgray" }}>
         <Header style={{ backgroundColor: "#0086FF" }} androidStatusBarColor="black">
           <Left>
-            <Button transparent>
+            {/* <Button transparent>
               <Icon
                 type="AntDesign"
                 style={{ fontSize: 25, color: "white" }}
                 name="contacts"
               />
 
-              {/* <Text>Back</Text> */}
-            </Button>
+            </Button> */}
           </Left>
           <Body>
             <Title style={{ color: 'white' }}>Menu</Title>
@@ -278,7 +277,15 @@ class menu extends Component {
           />
         </Content>
 
-        <Toast ref="toast" />
+        <Toast ref="toast"
+          // style={{ backgroundColor: 'red' }}
+          position='bottom'
+          // positionValue={200}
+          fadeInDuration={750}
+          fadeOutDuration={1000}
+          opacity={0.9}
+        // textStyle={{ color: 'white' }}
+        />
       </Container>
     );
   }

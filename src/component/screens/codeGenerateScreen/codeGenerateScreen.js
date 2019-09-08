@@ -116,12 +116,12 @@ export default class codeGenerateScreen extends Component {
             bgColor="#1E1341"
             fgColor="white"
           />
-          {/* <Text
+          <Text
             onPress={() => this.sentCode(this.state.id)}
             style={{ fontWeight: "bold" }}
           >
             GỬI LẠI CODE CHO HỌC SINH NÀY
-        </Text> */}
+        </Text>
         </View>
       </Container>
     );

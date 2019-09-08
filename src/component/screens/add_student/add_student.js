@@ -47,11 +47,16 @@ class add_student extends Component {
             .then(
                 // alert('Thêm thành công!'),
                 this.refs.toast.show(`Thêm thành công!`),
+                this.props.navigation.navigate(`list_student`, {
+                    email: this.state.email
+                })
 
                 // ToastAndroid.show("Đồng bộ thành công!!", ToastAndroid.SHORT),
                 // console.log("add student Success:", JSON.stringify(response))
             )
             .catch(error => console.error("Error:", error));
+
+
     };
 
     render() {

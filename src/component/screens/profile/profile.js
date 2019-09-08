@@ -9,25 +9,7 @@ import {
     Alert,
     ToastAndroid
 } from "react-native";
-import {
-    Container,
-    Header,
-    Left,
-    Body,
-    Right,
-    Button,
-    Icon,
-    Title,
-    Content,
-    Form,
-    Item,
-    Input,
-    Label,
-    List,
-    ListItem,
-    Thumbnail,
-    Text
-} from "native-base";
+import { Container, Header, Content, Card, CardItem, Thumbnail, Text, Button, Icon, Left, Body, Right, Title } from 'native-base';
 import QRCode from "react-native-qrcode";
 import axios from "axios";
 // import Backend from '../../config/Backend';
@@ -234,6 +216,37 @@ class profile extends Component {
                 </Header>
                 <Content style={{ width: "99.8%", paddingLeft: "0.2%" }}>
                     <ScrollView>
+                        <Card>
+                            <CardItem>
+                                <Left>
+                                    <Thumbnail source={{ uri: 'Image URL' }} />
+                                    <Body>
+                                        <Text>ĐỖ VĂN TỰ</Text>
+                                        <Text note>dovantuit@gmail.com</Text>
+                                    </Body>
+                                </Left>
+                            </CardItem>
+                            <CardItem cardBody>
+                                <Image source={{ uri: `https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQr9pao6ckd4fuaG10FTaOLT2TYQWdFW7soPdGToTGRsiZYAg_n` }} style={{ height: 200, width: null, flex: 1 }} />
+                            </CardItem>
+                            <CardItem>
+                                <Left>
+                                    <Button transparent>
+                                        <Icon active name="thumbs-up" />
+                                        <Text>12 Likes</Text>
+                                    </Button>
+                                </Left>
+                                <Body>
+                                    <Button transparent>
+                                        <Icon active name="mail" />
+                                        <Text>công tác viên</Text>
+                                    </Button>
+                                </Body>
+                                <Right>
+                                    <Text>11:11 A.M</Text>
+                                </Right>
+                            </CardItem>
+                        </Card>
 
                     </ScrollView>
                 </Content>

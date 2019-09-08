@@ -45,6 +45,8 @@ export default class scanQRScreen extends Component {
   async updateData_SQL1(id) {
     // this.refs.toast.show('đã đỉêm danh!');
     alert('checked done!')
+    this.refs.toast.show(`đã đỉêm danh!`)
+
 
     var data = {
       id: id,
@@ -228,6 +230,7 @@ export default class scanQRScreen extends Component {
       .then(res => res.json())
       .then(response => console.log("Success:", JSON.stringify(response)))
       .catch(error => console.error("Error:", error));
+
   };
 
   openLink_in_browser = () => {
@@ -238,6 +241,7 @@ export default class scanQRScreen extends Component {
     await this.setState({ QR_Code_Value: QR_Code });
     await this.checkDiemDanh(this.state.QR_Code_Value);
     this.setState({ Start_Scanner: false });
+
   };
 
   open_QR_Code_Scanner = () => {
@@ -324,7 +328,15 @@ export default class scanQRScreen extends Component {
                 Click to scan now
             </Text>
             </TouchableOpacity>
-            <Toast ref="toast" />
+            <Toast ref="toast"
+              // style={{ backgroundColor: 'red' }}
+              position='top'
+              // positionValue={200}
+              fadeInDuration={750}
+              fadeOutDuration={1000}
+              opacity={0.9}
+            // textStyle={{ color: 'white' }}
+            />
 
           </Content>
         </Container>
