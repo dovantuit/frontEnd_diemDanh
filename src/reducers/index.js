@@ -5,8 +5,10 @@ import storage from 'redux-persist/lib/storage'
 import { reducer as fromReducer } from 'redux-form'
 
 //import reduders here 
-import movieReducers, { name as nameOfMovieReducers } from './movieReducers'
+import studentReducers, { name as nameOfStudentReducers } from './studentReducers'
+
 import loadingReducers, { name as nameOfLoadingReducers } from './loadingReducers'; // import 
+
 ////
 
 const rootPersisConfig = {
@@ -18,7 +20,7 @@ const rootPersisConfig = {
 };
 
 const reducers = {
-    [nameOfMovieReducers]: movieReducers,
+    [nameOfStudentReducers]: studentReducers,
     [nameOfLoadingReducers]: loadingReducers
 }
 
@@ -32,6 +34,6 @@ const rootReducer = combineReducers(
 export default persistReducer(rootPersisConfig, rootReducer);
 
 export {
-    nameOfMovieReducers,
+    nameOfStudentReducers,
     nameOfLoadingReducers
 }
