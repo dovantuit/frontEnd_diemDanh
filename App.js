@@ -33,10 +33,10 @@ export default createAppContainer(
     },
     {
       // initialRouteName: 'sign_up',
-      // initialRouteName: 'list_student',
+      initialRouteName: 'menu',
       // initialRouteName: 'codeGenerateScreen',
       // initialRouteName: 'scanQRScreen',
-      initialRouteName: "login_redux_form"
+      // initialRouteName: "login_redux_form"
     }
   )
 );
